@@ -21,7 +21,7 @@ private:
      * Executes a Step.
      * @param step The step that shall be executed.
      */
-    void set(Step step);   const static unsigned short SEGMENT_COMPLETE;
+    void set(Step step);
 
     /**
      * Reconstruct a 2D Array out of the internal bit masks.
