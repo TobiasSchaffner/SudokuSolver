@@ -1,5 +1,5 @@
 #include <stack>
-#include "step.h"
+#include "move.h"
 
 #ifndef SUDOKU_GAMEBOARD_H
 #define SUDOKU_GAMEBOARD_H
@@ -11,17 +11,21 @@ class Gameboard {
 
 private:
     /** The number of values that have been set. */
-    std::stack<Step> steps;
+    std::stack<Move> moves;
 
+    unsigned int size;
+    unsigned int segLength;
     unsigned short *rows;
     unsigned short *columns;
     unsigned short *segments;
+
+    int getSegmentNo(unsigned int col, unsigned int row) const;
 
      /**
      * Executes a Step.
      * @param step The step that shall be executed.
      */
-    void set(Step step);
+    void next(Move);
 
     /**
      * Reconstruct a 2D Array out of the internal bit masks.
@@ -30,13 +34,15 @@ private:
     int** get2DArray();
 
     /**
-     * Reverts a Step.
-     * @param step The step that shall be reverted.
+     * Revert the last step.
+     * @return True is reverted. False if there is nothing to revert.
      */
-    void revert(Step step);
+    bool undo();
+
+    unsigned short getPossibleMoves(unsigned short column, unsigned short row);
 
 public:
-    Gameboard();
+    Gameboard(unsigned int size);
     ~Gameboard();
 
     /**
@@ -47,24 +53,13 @@ public:
      * @param value The value from 1 to 9
      * @return A Step object containing this action.
      */
-    Step set(unsigned short column, unsigned short row, unsigned short value);
-
-    /**
-     * Get the number of Steps done.
-     * @return The size of the Stack holding the steps.
-     */
-    unsigned long getSteps();
-
-    /**
-     * Revert the last step.
-     * @return True is reverted. False if there is nothing to revert.
-     */
-    bool revert();
+    bool nextMove(unsigned short column, unsigned short row, unsigned short value);
 
     /**
      * Prints a 2D Array representation of the board.
      */
     void print();
 
-    unsigned short getPossibleMoves(unsigned short column, unsigned short row);
+
+    bool isSolved();
 };

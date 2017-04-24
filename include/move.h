@@ -10,7 +10,7 @@
 
 #endif //SUDOKU_STEP_H
 
-struct Step {
+struct Move {
 
     /**
      * Creates a Step Object.
@@ -18,15 +18,7 @@ struct Step {
      * @param row Row index from 0 to 8.
      * @param value A Bitmask representing the value.
      */
-    Step(unsigned short column, unsigned short row, unsigned short value){
-        assert(0 <= column < 9);
-        assert(0 <= row < 9);
-        assert(__builtin_popcount(value) == 1);
-
-        this->column = column;
-        this->row = row;
-        this->value = value;
-    }
+    Move(unsigned short column, unsigned short row, unsigned short value);
 
     /** Column index from 0 to 9. */
     unsigned short column;
