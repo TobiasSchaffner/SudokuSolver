@@ -2,8 +2,6 @@
 #include "../../include/gameboard.h"
 
 
-
-
 TEST(Gameboard, SomeTest) {
     EXPECT_NE(new Gameboard(5), nullptr);
 }
@@ -29,5 +27,5 @@ TEST(Gameboard, MoveInvalidWhenSameNumberInSeg) {
 TEST(GameBoard, MoveValidWhenDifferentNumbersInCol) {
     auto gb = new Gameboard(9);
     gb->nextMove(1,2,6);
-    EXPECT_TRUE(gb->nextMove(4,2,6));
+    EXPECT_TRUE(gb->nextMove(4,4,6));
 }
