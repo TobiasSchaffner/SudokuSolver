@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 3.6)
-project(sudoku)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(SOURCE_FILES main.cpp gameboard.h gameboard.cpp step.h util.h)
-add_executable(sudoku ${SOURCE_FILES})
+project(sudoku)
+
+add_subdirectory(src)
+add_subdirectory(test)
+
+include_directories(include)
+
+enable_testing()
+add_test(NAME SudokuTest COMMAND sudokuTest)
