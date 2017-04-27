@@ -17,6 +17,8 @@ int main() {
         cin >> val;
         if (gameboard->nextMove(col, row, val)) {
             gameboard->print();
+            cout << endl;
+            gameboard->printClasses();
         } else {
             cout << "Invalid move, try again pls" << endl;
         }

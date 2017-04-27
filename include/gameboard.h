@@ -1,4 +1,5 @@
 #include <stack>
+#include <list>
 #include "move.h"
 
 #ifndef SUDOKU_GAMEBOARD_H
@@ -18,6 +19,8 @@ private:
     unsigned short *rows;
     unsigned short *columns;
     unsigned short *segments;
+    std::list<unsigned short> *class2position;
+    unsigned short *position2class;
 
     int getSegmentNo(unsigned int col, unsigned int row) const;
 
@@ -41,6 +44,10 @@ private:
 
     unsigned short getPossibleMoves(unsigned short column, unsigned short row);
 
+    void adjustClass(unsigned short position, unsigned short newClass);
+
+    void adjustClasses(unsigned short inputColumn, unsigned short inputRow, bool up);
+
 public:
     Gameboard(unsigned int size);
     ~Gameboard();
@@ -59,6 +66,7 @@ public:
      * Prints a 2D Array representation of the board.
      */
     void print();
+    void printClasses();
 
 
     bool isSolved();
