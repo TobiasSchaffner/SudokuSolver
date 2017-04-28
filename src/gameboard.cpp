@@ -68,6 +68,8 @@ void Gameboard::adjustClass(unsigned short position, unsigned short newClass){
 }
 
 bool Gameboard::evaluateNext() {
+    if (isSolved()) return false;
+
     /* We step by step higher the number of possible numbers we allow for a class2position.
     * In the first run we only predict a number for positions where theres only one possible number left.
     * If we can not find such a position anymore we have to higher window by one and try our luck with a
@@ -99,8 +101,6 @@ bool Gameboard::evaluateNext() {
     }
     if (guesses.size() > 0) {
         while (moves.size() > guesses.top()) undo();
-        printf("moves size: %d\n", moves.size());
-        printf("guesses top: %d\n", guesses.top());
         Move wrongMove = moves.top();
         printf("Reverted to wrong move Nr: %d column: %d row: %d value: %d\n", guesses.top(), wrongMove.column, wrongMove.row, getRightestBitNumber(wrongMove.value));
         undo();
@@ -108,10 +108,6 @@ bool Gameboard::evaluateNext() {
         unsigned short possibles = getPossibleMoves(wrongMove.column, wrongMove.row);
         unsigned short value = getBitLeft(possibles, wrongMove.value);
         if (value) {
-            printf("wm c: %d\n", wrongMove.column);
-            printf("wm r: %d\n", wrongMove.row);
-            printf("rightest %d\n", getRightestBitNumber(value));
-
             nextMove(wrongMove.column + 1, wrongMove.row + 1, getRightestBitNumber(value));
             printf("Setting move Nr: %d colummn: %d row: %d value: %d\n", moves.size(), wrongMove.column, wrongMove.row, getRightestBitNumber(value));
             return true;
@@ -119,23 +115,7 @@ bool Gameboard::evaluateNext() {
         guesses.pop();
     }
     printf("unsolvable!");
-    exit(1);
-}
-
-Move* Gameboard::getNextMove(Move *lastMove) {
-    unsigned short possibles = getPossibleMoves(lastMove->column, lastMove->row);
-    unsigned short mask = ~((lastMove->value << 1) - 1);
-    possibles = possibles | mask;
-    if (possibles != 0) {
-        unsigned short result = getRightestBit(possibles);
-        if (result != 0) {
-            lastMove->value = result;
-            return lastMove;
-        }
-    } else
-        return NULL;
-    printf("This may never be reached!");
-    assert(false);
+    return false;
 }
 
 bool Gameboard::nextMove(unsigned short column, unsigned short row, unsigned short value) {
@@ -207,8 +187,4 @@ unsigned short** Gameboard::get2DArray(){
 
 unsigned short* Gameboard::getClasses() {
     return position2class;
-}
-
-Move Gameboard::lastMove() {
-    return moves.top();
 }

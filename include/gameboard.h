@@ -10,6 +10,10 @@ class Gameboard {
 private:
     /** The number of values that have been set. */
     std::stack<Move> moves;
+
+    /** A Stack of moves heights. Every time we have to make a guess we note the height of the move stack.
+     * If we come to a situation where we can't go on anymore we go back to the last guess and go on there.
+     */
     std::stack<unsigned short> guesses;
 
     unsigned int size;
@@ -38,11 +42,20 @@ private:
 
     unsigned short getPossibleMoves(unsigned short column, unsigned short row);
 
+    /**
+     * Set the new Class for a Position.
+     * @param position The Positon in 1D between 0 and 80.
+     * @param newClass The new Class.
+     */
     void adjustClass(unsigned short position, unsigned short newClass);
 
+    /**
+     * Adjust the classes around a position.
+     * @param inputColumn The column of the 2D position.
+     * @param inputRow The row of the 2D position.
+     * @param up True if we want to push the classes after setting a value. False if we want to lower after removing a value.
+     */
     void adjustClasses(unsigned short inputColumn, unsigned short inputRow, bool up);
-
-    Move* getNextMove(Move *lastMove);
 
 public:
     Gameboard(unsigned int size);
@@ -58,8 +71,10 @@ public:
      */
     bool nextMove(unsigned short column, unsigned short row, unsigned short value);
 
-    Move lastMove();
-
+    /**
+     * Try to set the next position.
+     * @return True if a value was set. False if already finished or unsolvable.
+     */
     bool evaluateNext();
 
     /**
@@ -68,8 +83,10 @@ public:
      */
     unsigned short** get2DArray();
 
+    /** Construct a printable array representation of the Classes. */
     unsigned short* getClasses();
 
+    /** True if solved. False if not. */
     bool isSolved();
 };
 

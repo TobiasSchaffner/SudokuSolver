@@ -30,8 +30,7 @@ int main() {
     gameboard->nextMove(4, 4, 1);
     gameboard->nextMove(4, 5, 3);
 
-    while(!gameboard->isSolved()) {
-        gameboard->evaluateNext();
+    while(gameboard->evaluateNext()) {
         printBoard(gameboard->get2DArray(), 9);
         printBoard(gameboard->getClasses(), 9);
     }

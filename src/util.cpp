@@ -1,6 +1,4 @@
-#include <assert.h>
 #include "../include/util.h"
-#include "string.h"
 
 char* getBinaryAsString(unsigned short byte) {
     char* result = new char[10];
@@ -35,12 +33,16 @@ void printBoard(unsigned short *array, unsigned short size){
     printf("\n");
 }
 
-/**
- * @param input a bitmask for example 000111010
- * @return would lead to 000000010
- */
+
+
+unsigned short getBitLeft(unsigned short input, unsigned short position) {
+    unsigned short mask = ~((position << 1) - 1);
+    unsigned short possibles = input & mask;
+    return getRightestBit(possibles);
+}
+
 unsigned short getRightestBit(unsigned short input) {
-    unsigned short result;
+    unsigned short result = 0;
     for (unsigned short bitmask : BIT_CONSTS) {
         result = input & bitmask;
         if (result) {
@@ -50,16 +52,6 @@ unsigned short getRightestBit(unsigned short input) {
     return result;
 }
 
-unsigned short getBitLeft(unsigned short input, unsigned short position) {
-    unsigned short mask = ~((position << 1) - 1);
-    unsigned short possibles = input & mask;
-    return getRightestBit(possibles);
-}
-
-/**
- * @param input a bitmask for example 000111010
- * @return in case of 000111010 2;  0 if 000000000
- */
 unsigned short getRightestBitNumber(unsigned short input) {
     for (unsigned short i = 0; i < 9; ++i) {
         if (input & BIT_CONSTS[i]) {
