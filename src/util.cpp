@@ -50,6 +50,12 @@ unsigned short getRightestBit(unsigned short input) {
     return result;
 }
 
+unsigned short getBitLeft(unsigned short input, unsigned short position) {
+    unsigned short mask = ~((position << 1) - 1);
+    unsigned short possibles = input & mask;
+    return getRightestBit(possibles);
+}
+
 /**
  * @param input a bitmask for example 000111010
  * @return in case of 000111010 2;  0 if 000000000

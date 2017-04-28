@@ -10,6 +10,7 @@ class Gameboard {
 private:
     /** The number of values that have been set. */
     std::stack<Move> moves;
+    std::stack<unsigned short> guesses;
 
     unsigned int size;
     unsigned int segLength;
@@ -56,6 +57,8 @@ public:
      * @return A Step object containing this action.
      */
     bool nextMove(unsigned short column, unsigned short row, unsigned short value);
+
+    Move lastMove();
 
     bool evaluateNext();
 

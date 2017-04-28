@@ -18,6 +18,8 @@ unsigned short getRightestBit(unsigned short input);
 
 unsigned short getRightestBitNumber(unsigned short input);
 
+unsigned short getBitLeft(unsigned short input, unsigned short position);
+
 unsigned short getSegmentNumber(unsigned short column, unsigned short row);
 
 #endif

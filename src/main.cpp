@@ -28,27 +28,14 @@ int main() {
     */
 
     gameboard->nextMove(4, 4, 1);
-    gameboard->nextMove(5, 5, 5);
-    gameboard->nextMove(6, 6, 6);
-    gameboard->nextMove(6, 5, 7);
     gameboard->nextMove(4, 5, 3);
-    printBoard(gameboard->get2DArray(),9);
-    printBoard(gameboard->getClasses(),9);
-    gameboard->evaluateNext();
-    printBoard(gameboard->get2DArray(),9);
-    printBoard(gameboard->getClasses(),9);
-    gameboard->evaluateNext();
-    printBoard(gameboard->get2DArray(),9);
-    printBoard(gameboard->getClasses(),9);
-    gameboard->evaluateNext();
-    printBoard(gameboard->get2DArray(),9);
-    printBoard(gameboard->getClasses(),9);
-    gameboard->evaluateNext();
-    printBoard(gameboard->get2DArray(),9);
-    printBoard(gameboard->getClasses(),9);
-    gameboard->evaluateNext();
-    printBoard(gameboard->get2DArray(),9);
-    printBoard(gameboard->getClasses(),9);
+
+    while(!gameboard->isSolved()) {
+        gameboard->evaluateNext();
+        printBoard(gameboard->get2DArray(), 9);
+        printBoard(gameboard->getClasses(), 9);
+    }
+
     return 0;
 }
 
