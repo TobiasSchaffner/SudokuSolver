@@ -42,7 +42,7 @@ TEST(GameBoard, MoveValidWhenDifferentNumbersInSeg) {
     EXPECT_TRUE(gb->nextMove(1,2,7));
 }
 
-TEST(GameBoard, NextMoveOutOfLowerBounds) {
+TEST(GameBoard, NextMoveColumnOutOfLowerBounds) {
     //auto gb = new Gameboard(8);
     //ASSERT_DEATH(gb->nextMove(-1,1,1), "");
 }
@@ -56,9 +56,15 @@ TEST(GameBoard, NextMoveColumnOutOfUpperBounds) {
 }
 
 
-TEST(GameBoard, NextMoveColumnOutOfLowerBounds) {
+TEST(GameBoard, NextMoveRowOutOfUpperBounds) {
     auto gb = new Gameboard(8);
     EXPECT_FALSE(gb->nextMove(9,10,1));
+}
+
+TEST(Gameboard, InitializeEmptyTest) {
+    auto gb = new Gameboard(2);
+    EXPECT_TRUE(gb->get2DArray()[0][0] == 0 && gb->get2DArray()[0][1] == 0
+                && gb->get2DArray()[1][0] == 0 && gb->get2DArray()[1][1] == 0 );
 }
 
 
