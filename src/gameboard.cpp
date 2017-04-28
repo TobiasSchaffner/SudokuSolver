@@ -1,6 +1,8 @@
 #include <cmath>
 #include "../include/gameboard.h"
-#include "../include/util.h"
+#include "util.h"
+
+#define DEBUG 0
 
 Gameboard::Gameboard(unsigned int size) {
     const unsigned int arrayLen = size - 1;
@@ -65,6 +67,54 @@ void Gameboard::adjustClass(unsigned short position, unsigned short newClass){
     }
 }
 
+bool Gameboard::evaluateNext() {
+    /* We step by step higher the number of possible numbers we allow for a class2position.
+    * In the first run we only predict a number for positions where theres only one possible number left.
+    * If we can not find such a position anymore we have to higher window by one and try our luck with a
+    * position with two possibilities.
+    */
+    for (unsigned short window = 1; window <= 9; ++window) {
+
+        /* Start with the class we know the most. */
+        for (unsigned short predictionClass = 20; predictionClass >= 9 - window; --predictionClass) {
+            if (!class2position[predictionClass].empty()) {
+
+                /* Get every position in the class. */
+                for (unsigned short position : class2position[predictionClass]) {
+                    unsigned short column = position / size;
+                    unsigned short row = position % size;
+
+                    /* Get the intersection of possibles of the Row/Column/Field of the position. */
+                    unsigned short possibles = getPossibleMoves(column, row);
+
+                    if (__builtin_popcount(possibles) == window) {
+                        nextMove(column + 1, row + 1, getRightestBitNumber(possibles));
+                        printf("Setting column: %d row: %d value: %d\n", column+1, row+1, getRightestBitNumber(possibles));
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+Move* Gameboard::getNextMove(Move *lastMove) {
+    unsigned short possibles = getPossibleMoves(lastMove->column, lastMove->row);
+    unsigned short mask = ~((lastMove->value << 1) - 1);
+    possibles = possibles | mask;
+    if (possibles != 0) {
+        unsigned short result = getRightestBit(possibles);
+        if (result != 0) {
+            lastMove->value = result;
+            return lastMove;
+        }
+    } else
+        return NULL;
+    printf("This may never be reached!");
+    assert(false);
+}
+
 bool Gameboard::nextMove(unsigned short column, unsigned short row, unsigned short value) {
     assert(0 < column <= this->size);
     assert(0 < row <= this->size);
@@ -85,7 +135,7 @@ bool Gameboard::isSolved() {
 }
 
 void Gameboard::next(Move move) {
-    const int seg = move.column / 3 * move.row / 3;
+    const unsigned short seg = getSegmentNumber(move.column, move.row);
     this->columns[move.column] = this->columns[move.column] | move.value;
     this->rows[move.row] = this->rows[move.row] | move.value;
     this->segments[seg] = this->segments[seg] | move.value;
@@ -95,7 +145,7 @@ void Gameboard::next(Move move) {
 bool Gameboard::undo() {
     if (moves.empty()) return false;
     Move m = this->moves.top();
-    const int seg = this->getSegmentNo(m.column, m.row);
+    const int seg = getSegmentNumber(m.column, m.row);
     // apply reverse bitmask to rol/col/seg information
     this->columns[m.column] = this->columns[m.column] ^ m.value;
     this->rows[m.row] = this->rows[m.row] ^ m.value;
@@ -108,51 +158,30 @@ bool Gameboard::undo() {
 }
 
 unsigned short Gameboard::getPossibleMoves(unsigned short column, unsigned short row) {
-    const int seg = column / 3 * row / 3;
+    const unsigned short seg = getSegmentNumber(column, row);
     return SEGMENT_COMPLETE - (
-            this->rows[row] | this->columns[column] | this->segments[seg]);
+            rows[row] | columns[column] | segments[seg]);
 }
 
-int** Gameboard::get2DArray(){
-    int** board = 0;
-    board = new int*[9];
-    for (int height = 0; height < 9; ++height) board[height] = new int[9];
-    for (unsigned short column = 0; column<9; column++) {
-        unsigned short column_short = this->columns[column];
-        for(unsigned short number = 1; number < 10; number++) {
-            if (column_short & BIT_CONSTS[number - 1]) {
-                for (unsigned short row = 0; row < 9; row++) {
-                    if(this->rows[row] & (1 << (number - 1))) {
-                        board[column][row] = number;
-                    }
-                }
-            }
-        }
+unsigned short** Gameboard::get2DArray(){
+    unsigned short** board = 0;
+    board = new unsigned short*[9];
+    for (unsigned short height = 0; height < 9; ++height) board[height] = new unsigned short[9] {0};
+    std::stack<Move> temp;
+    while (moves.size() > 0) {
+        board[moves.top().column][moves.top().row] = getRightestBitNumber(moves.top().value);
+        Move move = moves.top();
+        temp.push(move);
+        moves.pop();
+    }
+    while (temp.size() > 0) {
+        Move move = temp.top();
+        moves.push(move);
+        temp.pop();
     }
     return board;
 }
 
-int Gameboard::getSegmentNo(unsigned int col, unsigned int row) const {
-    const int segLength = (const int) sqrt(this->size);
-    return col / segLength * row / segLength;
+unsigned short* Gameboard::getClasses() {
+    return position2class;
 }
-
-void Gameboard::print(){
-    int** board = this->get2DArray();
-    for (int row = 0; row < 9; ++row) {
-        for (int column = 0; column<9; ++column) {
-            std::cout << board[column][row] << " ";
-        }
-        std::cout << std::endl;
-    }
-}
-
-void Gameboard::printClasses(){
-    for (int row = 0; row < 9; ++row) {
-        for (int column = 0; column<9; ++column) {
-            std::cout << position2class[column*9+row] << " ";
-        }
-        std::cout << std::endl;
-    }
-}
-

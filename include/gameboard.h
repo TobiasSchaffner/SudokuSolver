@@ -1,12 +1,9 @@
-#include <stack>
-#include <list>
-#include "move.h"
-
 #ifndef SUDOKU_GAMEBOARD_H
 #define SUDOKU_GAMEBOARD_H
 
-#endif //SUDOKU_GAMEBOARD_H
-
+#include <stack>
+#include <list>
+#include "move.h"
 
 class Gameboard {
 
@@ -19,22 +16,18 @@ private:
     unsigned short *rows;
     unsigned short *columns;
     unsigned short *segments;
-    std::list<unsigned short> *class2position;
-    unsigned short *position2class;
 
-    int getSegmentNo(unsigned int col, unsigned int row) const;
+    /** holds the positions for a class. All positions start in class 0. If a position is set it goes to class 21 */
+    std::list<unsigned short> *class2position;
+
+    /** holds the classes for a position. There are 81 positions. 9*column + row */
+    unsigned short *position2class;
 
      /**
      * Executes a Step.
      * @param step The step that shall be executed.
      */
     void next(Move);
-
-    /**
-     * Reconstruct a 2D Array out of the internal bit masks.
-     * @return A 2D Array board[columns][rows] representing the board.
-     */
-    int** get2DArray();
 
     /**
      * Revert the last step.
@@ -47,6 +40,8 @@ private:
     void adjustClass(unsigned short position, unsigned short newClass);
 
     void adjustClasses(unsigned short inputColumn, unsigned short inputRow, bool up);
+
+    Move* getNextMove(Move *lastMove);
 
 public:
     Gameboard(unsigned int size);
@@ -62,12 +57,17 @@ public:
      */
     bool nextMove(unsigned short column, unsigned short row, unsigned short value);
 
-    /**
-     * Prints a 2D Array representation of the board.
-     */
-    void print();
-    void printClasses();
+    bool evaluateNext();
 
+    /**
+     * Reconstruct a 2D Array out of the internal bit masks.
+     * @return A 2D Array board[columns][rows] representing the board.
+     */
+    unsigned short** get2DArray();
+
+    unsigned short* getClasses();
 
     bool isSolved();
 };
+
+#endif

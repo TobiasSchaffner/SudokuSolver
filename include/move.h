@@ -1,14 +1,8 @@
-//
-// Created by confix on 4/20/17.
-//
+#ifndef SUDOKU_MOVE_H
+#define SUDOKU_MOVE_H
 
 #include <iostream>
 #include <assert.h>
-
-#ifndef SUDOKU_STEP_H
-#define SUDOKU_STEP_H
-
-#endif //SUDOKU_STEP_H
 
 struct Move {
 
@@ -36,3 +30,5 @@ struct Move {
      */
     unsigned short value;
 };
+
+#endif

@@ -1,11 +1,12 @@
 #include <iostream>
 #include "../include/gameboard.h"
+#include "util.h"
 
 using namespace std;
 
 int main() {
     auto gameboard = new Gameboard(9);
-
+/*
     while (!gameboard->isSolved()) {
         int col, row, val;
         cout << "Please enter your next move:" << endl;
@@ -23,6 +24,31 @@ int main() {
             cout << "Invalid move, try again pls" << endl;
         }
     }
+
+    */
+
+    gameboard->nextMove(4, 4, 1);
+    gameboard->nextMove(5, 5, 5);
+    gameboard->nextMove(6, 6, 6);
+    gameboard->nextMove(6, 5, 7);
+    gameboard->nextMove(4, 5, 3);
+    printBoard(gameboard->get2DArray(),9);
+    printBoard(gameboard->getClasses(),9);
+    gameboard->evaluateNext();
+    printBoard(gameboard->get2DArray(),9);
+    printBoard(gameboard->getClasses(),9);
+    gameboard->evaluateNext();
+    printBoard(gameboard->get2DArray(),9);
+    printBoard(gameboard->getClasses(),9);
+    gameboard->evaluateNext();
+    printBoard(gameboard->get2DArray(),9);
+    printBoard(gameboard->getClasses(),9);
+    gameboard->evaluateNext();
+    printBoard(gameboard->get2DArray(),9);
+    printBoard(gameboard->getClasses(),9);
+    gameboard->evaluateNext();
+    printBoard(gameboard->get2DArray(),9);
+    printBoard(gameboard->getClasses(),9);
     return 0;
 }
 
