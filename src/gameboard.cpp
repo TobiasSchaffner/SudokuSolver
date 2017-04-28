@@ -27,22 +27,26 @@ Gameboard::~Gameboard() {
     delete(this->segments);
 }
 
-void Gameboard::adjustClasses(unsigned short inputColumn, unsigned short inputRow, bool up){
-    short class_change = 0;
-    if (up) class_change = 1;
-    else class_change = -1;
-
-    unsigned short position = inputColumn*9+inputRow;
-    adjustClass(position, 21);
+void Gameboard::adjustClasses(unsigned short inputColumn, unsigned short inputRow, short change){
+    unsigned short newPositionClass = 0;
+    unsigned short position = 0;
 
     for(unsigned short column = 0; column < 9; ++column){
-        position = column*9 + inputRow;
-        adjustClass(position, position2class[position] + class_change);
+        if (column != inputColumn) {
+            position = column * 9 + inputRow;
+            if (position2class[position] != 21) {
+                adjustClass(position, position2class[position] + change);
+            } else newPositionClass++;
+        }
     }
 
     for(unsigned short row = 0; row < 9; ++row){
-        position = inputColumn*9 + row;
-        adjustClass(position, position2class[position] + class_change);
+        if (row != inputRow) {
+            position = inputColumn * 9 + row;
+            if (position2class[position] != 21) {
+                adjustClass(position, position2class[position] + change);
+            } else newPositionClass++;
+        }
     }
 
     unsigned short fieldStartRow = (inputRow / 3) * 3;
@@ -52,19 +56,22 @@ void Gameboard::adjustClasses(unsigned short inputColumn, unsigned short inputRo
         for(unsigned short row = fieldStartRow; row < fieldStartRow + 3; ++row) {
             if (column != inputColumn && row != inputRow) {
                 position = column * 9 + row;
-                adjustClass(position, position2class[position] + class_change);
+                if (position2class[position] != 21) {
+                    adjustClass(position, position2class[position] + change);
+                } else newPositionClass++;
             }
         }
     }
+
+    position = inputColumn * 9 + inputRow;
+    adjustClass(position, newPositionClass);
 }
 
 void Gameboard::adjustClass(unsigned short position, unsigned short newClass){
-    if (position2class[position] != 21) {
-        class2position[position2class[position]].remove(position);
-        position2class[position] = newClass;
-        class2position[position2class[position]].push_back(position);
-        class2position[position2class[position]].sort();
-    }
+    class2position[position2class[position]].remove(position);
+    position2class[position] = newClass;
+    class2position[position2class[position]].push_back(position);
+    class2position[position2class[position]].sort();
 }
 
 bool Gameboard::evaluateNext() {
@@ -92,24 +99,25 @@ bool Gameboard::evaluateNext() {
                     if (__builtin_popcount(possibles) == window) {
                         nextMove(column + 1, row + 1, getRightestBitNumber(possibles));
                         if (window > 1) guesses.push(moves.size());
-                        printf("Setting move Nr: %d column: %d row: %d value: %d\n", moves.size(), column+1, row+1, getRightestBitNumber(possibles));
+                        //printf("Setting move Nr: %d column: %d row: %d value: %d\n", moves.size(), column+1, row+1, getRightestBitNumber(possibles));
                         return true;
                     }
                 }
             }
         }
     }
-    if (guesses.size() > 0) {
+    while (guesses.size() > 0) {
         while (moves.size() > guesses.top()) undo();
         Move wrongMove = moves.top();
-        printf("Reverted to wrong move Nr: %d column: %d row: %d value: %d\n", guesses.top(), wrongMove.column, wrongMove.row, getRightestBitNumber(wrongMove.value));
+        //printf("Reverted to wrong move Nr: %d column: %d row: %d value: %d\n", guesses.top(), wrongMove.column, wrongMove.row, getRightestBitNumber(wrongMove.value));
         undo();
+
 
         unsigned short possibles = getPossibleMoves(wrongMove.column, wrongMove.row);
         unsigned short value = getBitLeft(possibles, wrongMove.value);
         if (value) {
             nextMove(wrongMove.column + 1, wrongMove.row + 1, getRightestBitNumber(value));
-            printf("Setting move Nr: %d colummn: %d row: %d value: %d\n", moves.size(), wrongMove.column, wrongMove.row, getRightestBitNumber(value));
+            //printf("Setting move Nr: %d colummn: %d row: %d value: %d\n", moves.size(), wrongMove.column, wrongMove.row, getRightestBitNumber(value));
             return true;
         }
         guesses.pop();
@@ -127,10 +135,26 @@ bool Gameboard::nextMove(unsigned short column, unsigned short row, unsigned sho
     if((mask & this->getPossibleMoves(column - 1, row - 1)) == mask) {
         Move nextMove(column - 1, row - 1, mask);
         next(nextMove);
-        adjustClasses(column - 1, row - 1, true);
+        adjustClasses(column - 1, row - 1, 1);
+        adjustClass((column - 1) * 9 + row - 1, 21);
         moveValid = true;
     }
     return moveValid;
+}
+
+bool Gameboard::undo() {
+    if (moves.empty()) return false;
+    Move m = this->moves.top();
+    const int seg = getSegmentNumber(m.column, m.row);
+    // apply reverse bitmask to rol/col/seg information
+    this->columns[m.column] = this->columns[m.column] ^ m.value;
+    this->rows[m.row] = this->rows[m.row] ^ m.value;
+    this->segments[seg] = this->segments[seg] ^ m.value;
+
+    adjustClasses(m.column, m.row, -1);
+
+    moves.pop();
+    return true;
 }
 
 bool Gameboard::isSolved() {
@@ -145,20 +169,6 @@ void Gameboard::next(Move move) {
     this->moves.push(move);
 }
 
-bool Gameboard::undo() {
-    if (moves.empty()) return false;
-    Move m = this->moves.top();
-    const int seg = getSegmentNumber(m.column, m.row);
-    // apply reverse bitmask to rol/col/seg information
-    this->columns[m.column] = this->columns[m.column] ^ m.value;
-    this->rows[m.row] = this->rows[m.row] ^ m.value;
-    this->segments[seg] = this->segments[seg] ^ m.value;
-
-    adjustClasses(m.column, m.row, false);
-
-    moves.pop();
-    return true;
-}
 
 unsigned short Gameboard::getPossibleMoves(unsigned short column, unsigned short row) {
     const unsigned short seg = getSegmentNumber(column, row);

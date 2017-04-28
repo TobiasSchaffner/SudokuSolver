@@ -27,13 +27,14 @@ int main() {
 
     */
 
-    gameboard->nextMove(4, 4, 1);
-    gameboard->nextMove(4, 5, 3);
+    gameboard->nextMove(1, 5, 5);
+    gameboard->nextMove(2, 8, 5);
 
     while(gameboard->evaluateNext()) {
         printBoard(gameboard->get2DArray(), 9);
         printBoard(gameboard->getClasses(), 9);
     }
+    printBoard(gameboard->get2DArray(), 9);
 
     return 0;
 }
