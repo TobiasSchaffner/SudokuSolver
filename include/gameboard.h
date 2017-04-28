@@ -34,11 +34,6 @@ private:
      */
     void next(Move);
 
-    /**
-     * Revert the last step.
-     * @return True is reverted. False if there is nothing to revert.
-     */
-    bool undo();
 
     unsigned short getPossibleMoves(unsigned short column, unsigned short row);
 
@@ -55,7 +50,7 @@ private:
      * @param inputRow The row of the 2D position.
      * @param up True if we want to push the classes after setting a value. False if we want to lower after removing a value.
      */
-    void adjustClasses(unsigned short inputColumn, unsigned short inputRow, bool up);
+    void adjustClasses(unsigned short inputColumn, unsigned short inputRow, short change);
 
 public:
     Gameboard(unsigned int size);
@@ -70,6 +65,12 @@ public:
      * @return A Step object containing this action.
      */
     bool nextMove(unsigned short column, unsigned short row, unsigned short value);
+
+    /**
+     * Revert the last step.
+     * @return True is reverted. False if there is nothing to revert.
+     */
+    bool undo();
 
     /**
      * Try to set the next position.
