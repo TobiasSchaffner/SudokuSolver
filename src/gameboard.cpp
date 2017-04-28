@@ -77,10 +77,18 @@ void Gameboard::adjustClass(unsigned short position, unsigned short newClass){
 bool Gameboard::evaluateNext() {
     if (isSolved()) return false;
 
-    /* We step by step higher the number of possible numbers we allow for a class2position.
-    * In the first run we only predict a number for positions where theres only one possible number left.
+    /* We step by step higher the number of possible numbers we allow for class2position by the window variable.
+    * In the first run we only predict a number for positions when there is only one possible number left.
     * If we can not find such a position anymore we have to higher window by one and try our luck with a
     * position with two possibilities.
+    * If we have more than one possibiliy we have to make a guess. In this case we save the position of the guess by
+    * pushing the stack position of the corresponding move on the guesses stack.
+    * If we can not find a position to set a number we have done something wrong and have to go back to the last guess.
+    * If there are other Numbers left that we can try for that position we try the next higher number. (next set bit
+    * left from the bit of the last try)
+    * If we can't we have done something wrong before that guess and have to go back one guess and try to proceed
+    * there instead.
+    * We return false if there is no solution for the board or the board is already filled.
     */
     for (unsigned short window = 1; window <= 9; ++window) {
 
@@ -96,32 +104,39 @@ bool Gameboard::evaluateNext() {
                     /* Get the intersection of possibles of the Row/Column/Field of the position. */
                     unsigned short possibles = getPossibleMoves(column, row);
 
+                    /* If there are as many possible number as out window allows. */
                     if (__builtin_popcount(possibles) == window) {
                         nextMove(column + 1, row + 1, getRightestBitNumber(possibles));
+                        /* If our window is bigger than 1 we had to make a guess and. */
                         if (window > 1) guesses.push(moves.size());
-                        //printf("Setting move Nr: %d column: %d row: %d value: %d\n", moves.size(), column+1, row+1, getRightestBitNumber(possibles));
+                        if (DEBUG) printf("Setting move Nr: %d column: %d row: %d value: %d\n", moves.size(), column+1, row+1, getRightestBitNumber(possibles));
                         return true;
                     }
                 }
             }
         }
     }
+
+    // We couldn't find position to set a move above. Now we roll back to the last guess and pick the next number.
     while (guesses.size() > 0) {
         while (moves.size() > guesses.top()) undo();
         Move wrongMove = moves.top();
-        //printf("Reverted to wrong move Nr: %d column: %d row: %d value: %d\n", guesses.top(), wrongMove.column, wrongMove.row, getRightestBitNumber(wrongMove.value));
+        if (DEBUG) printf("Reverted to wrong move Nr: %d column: %d row: %d value: %d\n", guesses.top(), wrongMove.column, wrongMove.row, getRightestBitNumber(wrongMove.value));
         undo();
-
 
         unsigned short possibles = getPossibleMoves(wrongMove.column, wrongMove.row);
         unsigned short value = getBitLeft(possibles, wrongMove.value);
+
+        // If there is a number left to try. We set that value and return.
         if (value) {
             nextMove(wrongMove.column + 1, wrongMove.row + 1, getRightestBitNumber(value));
-            //printf("Setting move Nr: %d colummn: %d row: %d value: %d\n", moves.size(), wrongMove.column, wrongMove.row, getRightestBitNumber(value));
+            if (DEBUG) printf("Setting move Nr: %d colummn: %d row: %d value: %d\n", moves.size(), wrongMove.column, wrongMove.row, getRightestBitNumber(value));
             return true;
         }
+        // Else we go back to the guess before and proceed.
         guesses.pop();
     }
+    // If there are no positions anymore where we could have done a wrong decision we ran over the whole tree without a solution.
     printf("unsolvable!");
     return false;
 }
