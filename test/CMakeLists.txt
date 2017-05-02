@@ -35,5 +35,5 @@ project(sudokuTest)
 
 set(SOURCE_FILES, src/gameboard-test.cpp)
 
-add_executable(sudokuTest src/gameboard-test.cpp src/main.cpp)
+add_executable(sudokuTest src/gameboard-test.cpp src/main.cpp ../src/util.cpp)
 target_link_libraries(sudokuTest sudokuShared gtest)
