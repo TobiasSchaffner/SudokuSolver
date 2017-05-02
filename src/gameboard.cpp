@@ -77,19 +77,13 @@ void Gameboard::adjustClass(unsigned short position, unsigned short newClass){
 bool Gameboard::evaluateNext() {
     if (isSolved()) return false;
 
-    /* We step by step higher the number of possible numbers we allow for class2position by the window variable.
-    * In the first run we only predict a number for positions when there is only one possible number left.
-    * If we can not find such a position anymore we have to higher window by one and try our luck with a
-    * position with two possibilities.
-    * If we have more than one possibiliy we have to make a guess. In this case we save the position of the guess by
-    * pushing the stack position of the corresponding move on the guesses stack.
-    * If we can not find a position to set a number we have done something wrong and have to go back to the last guess.
-    * If there are other Numbers left that we can try for that position we try the next higher number. (next set bit
-    * left from the bit of the last try)
-    * If we can't we have done something wrong before that guess and have to go back one guess and try to proceed
-    * there instead.
-    * We return false if there is no solution for the board or the board is already filled.
-    */
+    return this->hasMostPromisingField() || this->guessNextMove();
+
+}
+
+bool Gameboard::hasMostPromisingField() {
+
+
     for (unsigned short window = 1; window <= 9; ++window) {
 
         /* Start with the class we know the most. */
@@ -106,6 +100,10 @@ bool Gameboard::evaluateNext() {
 
                     /* If there are as many possible number as out window allows. */
                     if (__builtin_popcount(possibles) == window) {
+                        if (getRightestBit(possibles) == 0){
+                            printf("possibles %s\n", getBinaryAsString(possibles));
+                            printf("Rightesst bit possibles %s\n", getBinaryAsString(getRightestBit(possibles)));
+                        }
                         nextMove(column + 1, row + 1, getRightestBitNumber(possibles));
                         /* If our window is bigger than 1 we had to make a guess and. */
                         if (window > 1) guesses.push(moves.size());
@@ -116,7 +114,10 @@ bool Gameboard::evaluateNext() {
             }
         }
     }
+    return false;
+}
 
+bool Gameboard::guessNextMove() {
     // We couldn't find position to set a move above. Now we roll back to the last guess and pick the next number.
     while (guesses.size() > 0) {
         while (moves.size() > guesses.top()) undo();
@@ -139,14 +140,19 @@ bool Gameboard::evaluateNext() {
     // If there are no positions anymore where we could have done a wrong decision we ran over the whole tree without a solution.
     printf("unsolvable!");
     return false;
+
 }
 
 bool Gameboard::nextMove(unsigned short column, unsigned short row, unsigned short value) {
     assert(0 < column <= this->size);
     assert(0 < row <= this->size);
     assert(0 < value <= this->size);
+    printf("Column: %d, row: %d, value: %d\n", column, row, value);
     bool moveValid = false;
     const unsigned short mask = (1 << (value - 1));
+    if (mask == 0) {
+        printf("halt");
+    }
     if((mask & this->getPossibleMoves(column - 1, row - 1)) == mask) {
         Move nextMove(column - 1, row - 1, mask);
         next(nextMove);

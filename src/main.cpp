@@ -32,8 +32,15 @@ int main() {
 
     */
 
-    gameboard->nextMove(1, 5, 5);
-    gameboard->nextMove(2, 8, 5);
+    gameboard->nextMove(1, 1, 1);
+    gameboard->nextMove(2, 2, 2);
+    gameboard->nextMove(3, 3, 3);
+    gameboard->nextMove(4, 4, 4);
+    gameboard->nextMove(5, 5, 5);
+    gameboard->nextMove(6, 6, 6);
+    gameboard->nextMove(7, 7, 7);
+    gameboard->nextMove(8, 8, 8);
+    gameboard->nextMove(9, 9, 9);
 
     while(gameboard->evaluateNext()) {
         printBoard(gameboard->get2DArray(), 9);

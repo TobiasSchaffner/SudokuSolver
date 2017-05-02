@@ -52,6 +52,23 @@ private:
      */
     void adjustClasses(unsigned short inputColumn, unsigned short inputRow, short change);
 
+    /* We step by step increase the number of possible numbers we allow for class2position by the window variable.
+     * In the first run we only predict a number for positions when there is only one possible number left.
+     * If we can not find such a position anymore we have to increase window by one and try our luck with a
+     * position with two possibilities.
+     * If we have more than one possibility we have to make a guess. In this case we save guessed position by
+     * pushing the stack position of the corresponding move on the guesses stack.
+     * If we can not find a position to set a number we have done something wrong and have to go back to the last guess.
+     * If there are other Numbers left that we can try for that position we try the next higher number. (next set bit
+     * left from the bit of the last try)
+     * If we can't we have done something wrong before that guess and have to go back one guess and try to proceed
+     * there instead.
+     * We return false if there is no solution for the board or the board is already filled.
+     */
+    bool hasMostPromisingField();
+
+    bool guessNextMove();
+
 public:
     Gameboard(unsigned int size);
     ~Gameboard();
