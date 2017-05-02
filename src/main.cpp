@@ -1,9 +1,14 @@
 #include <iostream>
+#include <board-initializer.h>
 #include "../include/gameboard.h"
 
 using namespace std;
 
 int main() {
+
+    auto binit = new BoardInitializer();
+    binit->initBoard("/home/confix/Projects/cpp/sudoku/game-a");
+
     auto gameboard = new Gameboard(9);
 
     while (!gameboard->isSolved()) {

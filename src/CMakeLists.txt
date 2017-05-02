@@ -1,6 +1,6 @@
 project(sudokuShared)
 project(sudokuEntry)
-set (SOURCE_FILES move.cpp gameboard.cpp)
+set (SOURCE_FILES move.cpp gameboard.cpp ../include/board-initializer.h board-initializer.cpp)
 set (ENTRY main.cpp)
 
 include_directories(../include)
