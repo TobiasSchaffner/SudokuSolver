@@ -4,12 +4,15 @@ Was können wir bereits?
 2. Print board
 3. Tracken von Moves
 4. Reverten von Moves
+5. Algorithmus für den Solver
+6. Auslesen von Sudoku Konfiguration für init
+7. Locking des Stacks, um das gegebene Spielfeld nicht so verändern, not an issue ;-)
+8. Segmentberechnung überprüfen
 
 Was brauchen wir noch?
 
-1. Algorithmus für den Solver
-2. Auslesen von Sudoku Konfiguration für init
-3. Locking des Stacks, um das gegebene Spielfeld nicht so verändern
-4. Segmentberechnung überprüfen
-5. Gui!?
-6. Tests
+1. Alternative für Algorithmus implementieren, um die "bit"-Struktur besser auszunutzen
+ -> konkrete: ABC ziehen, Tobis aktuelle Lösung in einer neuen Klasse implementieren und dann meine (Flo), um Vergleichbarkeit herzustellen
+2. Gui!?
+3. Tests
+4. Entweder mehrere Konfigurationdateien samt Ermitteln und Ausgeben der "Spielnahmen", oder mehrere Spiele in einer Datei implementieren.
