@@ -1,3 +1,4 @@
+#include <vector>
 #include "../include/util.h"
 
 char* getBinaryAsString(unsigned short byte) {
@@ -63,4 +64,19 @@ unsigned short getRightestBitNumber(unsigned short input) {
 
 unsigned short getSegmentNumber(unsigned short column, unsigned short row) {
     return (row / 3) * 3 + column / 3;
+}
+
+
+std::vector<std::string> split(std::string toSplit, char* deliminator) {
+    std::vector<std::string> result;
+
+    unsigned long next = 0;
+
+    for(unsigned long pos = 0; pos < toSplit.length() - 1; pos = next + 1) {
+        next = toSplit.find(deliminator, pos);
+        result.push_back(toSplit.substr(pos, next - pos));
+    }
+    result.push_back(toSplit.substr(toSplit.length() - 1, 1));
+
+    return result;
 }

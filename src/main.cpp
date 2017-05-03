@@ -7,11 +7,11 @@ using namespace std;
 
 int main() {
 
-    auto binit = new BoardInitializer();
-    binit->initBoard("/home/confix/Projects/cpp/sudoku/game-a");
+ auto binit = new BoardInitializer();
 
-    auto gameboard = new Gameboard(9);
-/*
+    auto gameboard = binit->create("/home/confix/Projects/cpp/sudoku/game-a");
+
+    /*
     while (!gameboard->isSolved()) {
         int col, row, val;
         cout << "Please enter your next move:" << endl;
@@ -28,25 +28,16 @@ int main() {
         } else {
             cout << "Invalid move, try again pls" << endl;
         }
-    }
+    }*/
 
-    */
-
-    gameboard->nextMove(1, 1, 1);
-    gameboard->nextMove(2, 2, 2);
-    gameboard->nextMove(3, 3, 3);
-    gameboard->nextMove(4, 4, 4);
-    gameboard->nextMove(5, 5, 5);
-    gameboard->nextMove(6, 6, 6);
-    gameboard->nextMove(7, 7, 7);
-    gameboard->nextMove(8, 8, 8);
-    gameboard->nextMove(9, 9, 9);
 
     while(gameboard->evaluateNext()) {
         printBoard(gameboard->get2DArray(), 9);
         printBoard(gameboard->getClasses(), 9);
     }
+
     printBoard(gameboard->get2DArray(), 9);
+
 
     return 0;
 }

@@ -6,9 +6,14 @@
 
 Gameboard::Gameboard(unsigned int size) {
     const unsigned int arrayLen = size - 1;
-    this->rows = new unsigned short[arrayLen];
-    this->columns = new unsigned short[arrayLen];
-    this->segments = new unsigned short[arrayLen];
+
+
+    this->max_possibles = ((unsigned int) (1 << size)) - 1;
+
+
+    this->rows = new unsigned short[arrayLen]{0};
+    this->columns = new unsigned short[arrayLen]{0};
+    this->segments = new unsigned short[arrayLen]{0};
 
     this->class2position = new std::list<unsigned short>[21 + 1];
     this->position2class = new unsigned short[81];
@@ -100,10 +105,6 @@ bool Gameboard::hasMostPromisingField() {
 
                     /* If there are as many possible number as out window allows. */
                     if (__builtin_popcount(possibles) == window) {
-                        if (getRightestBit(possibles) == 0){
-                            printf("possibles %s\n", getBinaryAsString(possibles));
-                            printf("Rightesst bit possibles %s\n", getBinaryAsString(getRightestBit(possibles)));
-                        }
                         nextMove(column + 1, row + 1, getRightestBitNumber(possibles));
                         /* If our window is bigger than 1 we had to make a guess and. */
                         if (window > 1) guesses.push(moves.size());
@@ -147,17 +148,16 @@ bool Gameboard::nextMove(unsigned short column, unsigned short row, unsigned sho
     assert(0 < column <= this->size);
     assert(0 < row <= this->size);
     assert(0 < value <= this->size);
-    printf("Column: %d, row: %d, value: %d\n", column, row, value);
     bool moveValid = false;
     const unsigned short mask = (1 << (value - 1));
-    if (mask == 0) {
-        printf("halt");
-    }
-    if((mask & this->getPossibleMoves(column - 1, row - 1)) == mask) {
-        Move nextMove(column - 1, row - 1, mask);
+    const unsigned short rowInArr = row - 1;
+    const unsigned short colInArr = column - 1;
+    if((mask & this->getPossibleMoves(colInArr, rowInArr)) == mask) {
+
+        Move nextMove(colInArr, rowInArr, mask);
         next(nextMove);
-        adjustClasses(column - 1, row - 1, 1);
-        adjustClass((column - 1) * 9 + row - 1, 21);
+        adjustClasses(colInArr, rowInArr, 1);
+        adjustClass((colInArr) * 9 + rowInArr, 21);
         moveValid = true;
     }
     return moveValid;
@@ -193,7 +193,7 @@ void Gameboard::next(Move move) {
 
 unsigned short Gameboard::getPossibleMoves(unsigned short column, unsigned short row) {
     const unsigned short seg = getSegmentNumber(column, row);
-    return SEGMENT_COMPLETE - (
+    return (unsigned short) this->max_possibles - (
             rows[row] | columns[column] | segments[seg]);
 }
 
