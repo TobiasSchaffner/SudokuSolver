@@ -6,11 +6,9 @@
 #define SUDOKU_SOLVER_H
 
 
-
-class solver {
-
+class Solver {
+    virtual bool evulateNext() = 0;
 };
-
 
 
 #endif //SUDOKU_SOLVER_H

@@ -22,11 +22,8 @@ private:
     unsigned short *columns;
     unsigned short *segments;
 
-    /** holds the positions for a class. All positions start in class 0. If a position is set it goes to class 21 */
-    std::list<unsigned short> *class2position;
+    unsigned short max_possibles;
 
-    /** holds the classes for a position. There are 81 positions. 9*column + row */
-    unsigned short *position2class;
 
      /**
      * Executes a Step.
@@ -36,6 +33,16 @@ private:
 
 
     unsigned short getPossibleMoves(unsigned short column, unsigned short row);
+
+
+
+    // SOLVER ///
+    /** holds the positions for a class. All positions start in class 0. If a position is set it goes to class 21 */
+    std::list<unsigned short> *class2position;
+
+    /** holds the classes for a position. There are 81 positions. 9*column + row */
+    unsigned short *position2class;
+
 
     /**
      * Set the new Class for a Position.
@@ -90,22 +97,27 @@ public:
     bool undo();
 
     /**
-     * Try to set the next position.
-     * @return True if a value was set. False if already finished or unsolvable.
-     */
-    bool evaluateNext();
-
-    /**
      * Reconstruct a 2D Array out of the internal bit masks.
      * @return A 2D Array board[columns][rows] representing the board.
      */
     unsigned short** get2DArray();
 
+    /** True if solved. False if not. */
+    bool isSolved();
+
+
+    /** SOLVER **/
+
+    /**
+     * Try to set the next position.
+     * @return True if a value was set. False if already finished or unsolvable.
+     */
+    bool evaluateNext();
+
+
     /** Construct a printable array representation of the Classes. */
     unsigned short* getClasses();
 
-    /** True if solved. False if not. */
-    bool isSolved();
 };
 
 #endif

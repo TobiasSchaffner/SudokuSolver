@@ -5,7 +5,13 @@
 #include <sstream>
 #include <gameboard.h>
 #include <vector>
+#include <cstring>
 
+#if defined(WIN32) || defined(_WIN32)
+#define PATH_SEPARATOR "\\"
+#else
+#define PATH_SEPARATOR "/"
+#endif
 
 class file_not_found_exception : public std::exception {
     virtual const char *what() const throw() {
@@ -13,12 +19,38 @@ class file_not_found_exception : public std::exception {
     }
 };
 
+class env_not_set_exception : public std::exception {
+        virtual const char *what() const throw() {
+            return "Set ENV \"SUDOKU_CONF\" to the config path";
+        }
+};
+
 
 
 Gameboard* BoardInitializer::create(std::string gameName) {
-    std::ifstream config(gameName);
+    std::string path, contents, line, field;
+    std::vector<std::vector<int>> board;
 
-    std::string contents;
+    char* confDir = std::getenv("SUDOKU_CONF");
+
+    if(confDir == NULL)
+        throw new env_not_set_exception;
+    unsigned int i = 0;
+    while(confDir[i] != '\0') {
+        ++i;
+    }
+
+
+    path.reserve(i - 1 + gameName.length());
+
+    path.append(confDir);
+    path.append(PATH_SEPARATOR);
+    path.append(gameName);
+
+
+    std::cout << path << std::endl;
+    std::ifstream config(path);
+
     if (config.fail()) {
         throw file_not_found_exception();
     }
@@ -31,8 +63,6 @@ Gameboard* BoardInitializer::create(std::string gameName) {
 
     std::istringstream input(contents);
 
-    std::string line, field;
-    std::vector<std::vector<int>> board;
     while(getline(input, line)) {
         std::istringstream l(line);
         std::vector<int> ld;
