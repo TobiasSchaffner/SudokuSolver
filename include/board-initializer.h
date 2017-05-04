@@ -8,10 +8,11 @@
 #endif //SUDOKU_BOARD_INITIALIZER_H
 
 #include <string>
+#include "gameboard.h"
 
 class BoardInitializer {
 public:
-    void initBoard(std::string gameName);
+    Gameboard* create(std::string gameName);
     char** getGamesSelection();
 };
 
