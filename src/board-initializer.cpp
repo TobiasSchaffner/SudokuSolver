@@ -3,6 +3,8 @@
 #include <fstream>
 #include "util.h"
 #include <sstream>
+#include <gameboard.h>
+#include <vector>
 
 
 class file_not_found_exception : public std::exception {

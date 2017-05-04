@@ -148,6 +148,7 @@ bool Gameboard::nextMove(unsigned short column, unsigned short row, unsigned sho
     assert(0 < column <= this->size);
     assert(0 < row <= this->size);
     assert(0 < value <= this->size);
+
     bool moveValid = false;
     const unsigned short mask = (1 << (value - 1));
     const unsigned short rowInArr = row - 1;
