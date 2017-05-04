@@ -22,7 +22,10 @@ private:
     unsigned short *columns;
     unsigned short *segments;
 
-    unsigned short max_possibles;
+    unsigned int max_possibles;
+
+    /** holds the positions for a class. All positions start in class 0. If a position is set it goes to class 21 */
+    std::list<unsigned short> *class2position;
 
 
      /**
