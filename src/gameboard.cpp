@@ -5,11 +5,9 @@
 #define DEBUG 0
 
 Gameboard::Gameboard(unsigned int size) {
-    const unsigned int arrayLen = size - 1;
-
+    const unsigned int arrayLen = size;
 
     this->max_possibles = ((unsigned int) (1 << size)) - 1;
-
 
     this->rows = new unsigned short[arrayLen]{0};
     this->columns = new unsigned short[arrayLen]{0};

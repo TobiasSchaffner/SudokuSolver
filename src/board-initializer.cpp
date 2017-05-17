@@ -1,11 +1,10 @@
 
 #include <board-initializer.h>
 #include <fstream>
-#include "util.h"
 #include <sstream>
-#include <gameboard.h>
-#include <vector>
 #include <cstring>
+#include <dirent.h>
+
 
 #if defined(WIN32) || defined(_WIN32)
 #define PATH_SEPARATOR "\\"
@@ -24,29 +23,30 @@ class env_not_set_exception : public std::exception {
             return "Set ENV \"SUDOKU_CONF\" to the config path";
         }
 };
-
-
+class directory_not_found_exception : public std::exception {
+        virtual const char *what() const throw() {
+            return "Your requested directory was not found";
+        }
+};
 
 Gameboard* BoardInitializer::create(std::string gameName) {
     std::string path, contents, line, field;
     std::vector<std::vector<int>> board;
-
-    char* confDir = std::getenv("SUDOKU_CONF");
-
-    if(confDir == NULL)
-        throw new env_not_set_exception;
-    unsigned int i = 0;
-    while(confDir[i] != '\0') {
-        ++i;
-    }
-
-
-    path.reserve(i - 1 + gameName.length());
-
-    path.append(confDir);
-    path.append(PATH_SEPARATOR);
+//    char* confDir = std::getenv("SUDOKU_CONF");
+//
+//    if(confDir == NULL)
+//        throw new env_not_set_exception;
+//    unsigned int i = 0;
+//    while(confDir[i] != '\0') {
+//        ++i;
+//    }
+//
+//
+//    path.reserve(i - 1 + gameName.length());
+//
+//    path.append(confDir);
+//    path.append(PATH_SEPARATOR);
     path.append(gameName);
-
 
     std::cout << path << std::endl;
     std::ifstream config(path);
@@ -74,11 +74,11 @@ Gameboard* BoardInitializer::create(std::string gameName) {
 
     auto gb = new Gameboard(board.size()); // since the board has to be quadratic
 
-    for(int i = 0; i < board.size(); ++i) {
-        for(int j = 0; j < board.size(); ++j) {
-            int val = board[i][j];
+    for(int row = 0; row < board.size(); ++row) {
+        for(int column = 0; column < board.size(); ++column) {
+            int val = board[row][column];
             if(val > 0)
-                gb->nextMove(j+1, i + 1, board[i][j]);
+                gb->nextMove(column+1, row + 1, board[row][column]);
         }
     }
 
@@ -87,4 +87,31 @@ Gameboard* BoardInitializer::create(std::string gameName) {
 
 char **BoardInitializer::getGamesSelection() {
     return nullptr;
+}
+
+std::vector<Gameboard*> BoardInitializer::create(){
+    std::string directory;
+    std::vector<std::string> paths;
+    std::vector<Gameboard*> boards;
+    char* confDir = std::getenv("SUDOKU_CONF");
+
+    if(confDir == NULL) throw new env_not_set_exception;
+
+    directory.append(confDir);
+
+    DIR *dir;
+    struct dirent *ent;
+    if((dir = opendir(confDir)) != NULL) {
+        // adding directory path for absolute path
+        while ((ent = readdir(dir)) != NULL) paths.push_back(directory + ent->d_name);
+        closedir(dir);
+        paths.erase(paths.begin(),paths.begin()+2);
+
+    }else{
+        throw new directory_not_found_exception;
+    }
+
+    for(auto const itr : paths) boards.push_back(create(itr));
+
+    return boards;
 }
