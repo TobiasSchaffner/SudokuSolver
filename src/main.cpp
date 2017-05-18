@@ -14,7 +14,7 @@ int main() {
     auto gameboard = binit->create("game-a.su");
     printBoard((unsigned int **) gameboard->get2DArray(), gameboard->getSize());
 
-    auto solver = new FloSolver(gameboard);
+    auto solver = new TobiSolver(gameboard);
 
 
     while (solver->evaluateNext()) {}
