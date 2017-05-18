@@ -5,11 +5,9 @@
 Gameboard::Gameboard(unsigned int size) {
     const unsigned int arrayLen = size;
 
-
     this->rows = new unsigned short[arrayLen]{0};
     this->columns = new unsigned short[arrayLen]{0};
     this->segments = new unsigned short[arrayLen]{0};
-
 
     this->size = size;
     this->boardData = new int*[size];
@@ -17,6 +15,7 @@ Gameboard::Gameboard(unsigned int size) {
         this->boardData[i] = new int[size]{0};
 
     this->segLength = (unsigned int) sqrt(size);
+    this->max_possibles = (1 << size) - 1;
 }
 
 Gameboard::~Gameboard() {
@@ -50,9 +49,16 @@ bool Gameboard::nextMove(unsigned short column, unsigned short row, unsigned sho
 void Gameboard::revertMove(Move m) {
     const int seg = getSegmentNumber(m.column, m.row);
     // apply reverse bitmask to rol/col/seg information
-    this->columns[m.column] = this->columns[m.column] ^ m.value;
-    this->rows[m.row] = this->rows[m.row] ^ m.value;
-    this->segments[seg] = this->segments[seg] ^ m.value;
+    int colB = this->columns[m.column];
+    int rowB = this->rows[m.row];
+    int segB = this->segments[seg];
+    this->columns[m.column] = this->columns[m.column] - (1 << (m.value - 1));
+    this->rows[m.row] = this->rows[m.row] - (1 << (m.value - 1));
+    this->segments[seg] = this->segments[seg] - (1 << (m.value - 1));
+
+    int colA = this->columns[m.column];
+    int rowA = this->rows[m.row];
+    int segA = this->segments[seg];
     this->boardData[m.column][m.row] = 0;
 }
 
@@ -81,6 +87,11 @@ const unsigned short Gameboard::getPossibleMoves(unsigned short column, unsigned
 
     const unsigned short seg = getSegmentNumber(column, row);
 
+    int r = rows[row];
+    int c = columns[column];
+    int s = segments[seg];
+    int mp = this->max_possibles;
+    int currVal = this->boardData[row][column];
     return (unsigned short) this->boardData[row][column] != 0 ? 0 : this->max_possibles - (
             rows[row] | columns[column] | segments[seg]);
 }

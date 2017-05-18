@@ -21,7 +21,10 @@ bool FloSolver::evaluateNext() {
     try {
         makeNextMove();
     } catch (NoSuchMoveException *ex) {
-        result = trackBack();
+        if (!this->board->isSolved())
+            result = trackBack();
+        else
+            return false;
     }
     return result;
 }
@@ -49,7 +52,8 @@ bool FloSolver::trackBack() {
 
         Kp m = this->moves->top();
         this->board->revertMove(m.move);
-        unsigned short possibles = this->board->getPossibleMoves(m.move.column, m.move.row) ^m.tryMask;
+        int p = this->board->getPossibleMoves(m.move.column, m.move.row);
+        unsigned short possibles = this->board->getPossibleMoves(m.move.column, m.move.row) - m.tryMask;
         unsigned short rightest = getRightestBitNumber(possibles);
         m.tryMask += rightest;
         this->board->nextMove(m.move.column, m.move.row, rightest);

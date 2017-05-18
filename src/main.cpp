@@ -11,14 +11,21 @@ int main() {
 
     auto binit = new BoardInitializer();
 
-    auto gameboard = binit->create().back();
+    auto gameboard = binit->create("/home/confix/Projects/cpp/sudoku/conf/game-a.su");
 
     printBoard((unsigned int **) gameboard->get2DArray(), gameboard->getSize());
 
-    auto solver = new TobiSolver(gameboard);
+    auto solver = new FloSolver(gameboard);
 
 
-    while (solver->evaluateNext()) {}
+    while (solver->evaluateNext()) {
+        printBoard((unsigned int **) gameboard->get2DArray(), gameboard->getSize());
+
+    }
+
+
+    printBoard((unsigned int **) gameboard->get2DArray(), gameboard->getSize());
+
 
     if (gameboard->isSolved()) {
         std::cout << "Solved";
