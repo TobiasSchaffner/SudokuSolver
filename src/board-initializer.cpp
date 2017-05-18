@@ -35,25 +35,24 @@ Gameboard* BoardInitializer::create(std::string gameName) {
 
     if(confDir == NULL)
         throw new env_not_set_exception;
-    unsigned int i = 0;
-    while(confDir[i] != '\0') {
-        ++i;
+
+    unsigned int strLength = 0;
+
+    while(confDir[strLength] != '\0') {
+        ++strLength;
     }
 
 
-    path.reserve(i - 1 + gameName.length());
+    path.reserve(strLength - 1 + gameName.length());
 
     path.append(confDir);
     path.append(PATH_SEPARATOR);
     path.append(gameName);
 
-
-    std::cout << path << std::endl;
     std::ifstream config(path);
 
-    if (config.fail()) {
-        throw file_not_found_exception();
-    }
+    if (config.fail()) throw file_not_found_exception();
+
 
     config.seekg(0, std::ios::end);
     contents.reserve((unsigned long) config.tellg()); // allocate space for file contents.
@@ -74,11 +73,11 @@ Gameboard* BoardInitializer::create(std::string gameName) {
 
     auto gb = new Gameboard(board.size()); // since the board has to be quadratic
 
-    for(int i = 0; i < board.size(); ++i) {
-        for(int j = 0; j < board.size(); ++j) {
-            int val = board[i][j];
+    for(int col = 0; col < board.size(); ++col) {
+        for(int row = 0; row < board.size(); ++row) {
+            int val = board[row][col];
             if(val > 0)
-                gb->nextMove(j+1, i + 1, board[i][j]);
+                gb->nextMove(col, row, val);
         }
     }
 

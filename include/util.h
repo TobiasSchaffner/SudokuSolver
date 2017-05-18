@@ -13,10 +13,10 @@ const unsigned short SEGMENT_COMPLETE = 511;
 char* getBinaryAsString(unsigned short byte);
 
 /** Print a 2D array as board. */
-void printBoard(unsigned short **array, unsigned short size);
+void printBoard(unsigned int **array, unsigned short size);
 
 /** Print a 1D array as board. */
-void printBoard(unsigned short *array, unsigned short size);
+void printBoard(unsigned int *array, unsigned short size);
 
 /**
  * Get only the rightest bit of bitmask if exists.

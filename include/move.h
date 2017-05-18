@@ -1,7 +1,7 @@
 #ifndef SUDOKU_MOVE_H
 #define SUDOKU_MOVE_H
 
-#include <iostream>
+#include<iostream>
 #include <assert.h>
 
 struct Move {

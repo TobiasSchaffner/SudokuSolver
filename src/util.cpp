@@ -14,26 +14,15 @@ char* getBinaryAsString(unsigned short byte) {
     return result;
 }
 
-void printBoard(unsigned short **array, unsigned short size){
+void printBoard(unsigned int **array, unsigned short size){
     for (int row = 0; row < size; ++row) {
         for (int column = 0; column<size; ++column) {
-            printf("%2d ", array[column][row]);
+            printf("%2d ", array[row][column]);
         }
         printf("\n");
     }
     printf("\n");
 }
-
-void printBoard(unsigned short *array, unsigned short size){
-    for (int row = 0; row < size; ++row) {
-        for (int column = 0; column<size; ++column) {
-            printf("%2d ", array[column*size+row]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
-
 
 
 unsigned short getBitLeft(unsigned short input, unsigned short position) {
@@ -63,7 +52,8 @@ unsigned short getRightestBitNumber(unsigned short input) {
 }
 
 unsigned short getSegmentNumber(unsigned short column, unsigned short row) {
-    return (row / 3) * 3 + column / 3;
+    short seg = (row / 3) * 3 + column / 3;
+    return seg;
 }
 
 

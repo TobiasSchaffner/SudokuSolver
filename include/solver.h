@@ -7,7 +7,8 @@
 
 
 class Solver {
-    virtual bool evulateNext() = 0;
+public:
+    virtual bool evaluateNext() = 0;
 };
 
 
