@@ -8,11 +8,18 @@
 #endif //SUDOKU_BOARD_INITIALIZER_H
 
 #include <string>
+#include <vector>
 #include "gameboard.h"
 
 class BoardInitializer {
 public:
-    Gameboard* create(std::string gameName);
-    char** getGamesSelection();
+    Gameboard *create(std::string gameName);
+
+    char **getGamesSelection();
+
+    /** Builds the gameboards to the given files.
+     * Reading the directory path form environment variable: SUDOKU_CONF
+     */
+    std::vector<Gameboard *> create();
 };
 

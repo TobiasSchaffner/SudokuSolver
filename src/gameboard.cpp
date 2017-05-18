@@ -3,11 +3,13 @@
 #include "util.h"
 
 Gameboard::Gameboard(unsigned int size) {
+    const unsigned int arrayLen = size;
 
-    this->max_possibles = ((unsigned int) (1 << size)) - 1;
-    this->rows = new unsigned short[size]{0};
-    this->columns = new unsigned short[size]{0};
-    this->segments = new unsigned short[size]{0};
+
+    this->rows = new unsigned short[arrayLen]{0};
+    this->columns = new unsigned short[arrayLen]{0};
+    this->segments = new unsigned short[arrayLen]{0};
+
 
     this->size = size;
     this->boardData = new int*[size];

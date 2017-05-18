@@ -1,11 +1,10 @@
 
 #include <board-initializer.h>
 #include <fstream>
-#include "util.h"
 #include <sstream>
-#include <gameboard.h>
-#include <vector>
 #include <cstring>
+#include <dirent.h>
+
 
 #if defined(WIN32) || defined(_WIN32)
 #define PATH_SEPARATOR "\\"
@@ -20,36 +19,22 @@ class file_not_found_exception : public std::exception {
 };
 
 class env_not_set_exception : public std::exception {
-        virtual const char *what() const throw() {
-            return "Set ENV \"SUDOKU_CONF\" to the config path";
-        }
+    virtual const char *what() const throw() {
+        return "Set ENV \"SUDOKU_CONF\" to the config path";
+    }
 };
 
+class directory_not_found_exception : public std::exception {
+    virtual const char *what() const throw() {
+        return "Your requested directory was not found";
+    }
+};
 
-
-Gameboard* BoardInitializer::create(std::string gameName) {
-    std::string path, contents, line, field;
+Gameboard *BoardInitializer::create(std::string gameName) {
+    std::string contents, line, field;
     std::vector<std::vector<int>> board;
 
-    char* confDir = std::getenv("SUDOKU_CONF");
-
-    if(confDir == NULL)
-        throw new env_not_set_exception;
-
-    unsigned int strLength = 0;
-
-    while(confDir[strLength] != '\0') {
-        ++strLength;
-    }
-
-
-    path.reserve(strLength - 1 + gameName.length());
-
-    path.append(confDir);
-    path.append(PATH_SEPARATOR);
-    path.append(gameName);
-
-    std::ifstream config(path);
+    std::ifstream config(gameName);
 
     if (config.fail()) throw file_not_found_exception();
 
@@ -62,10 +47,10 @@ Gameboard* BoardInitializer::create(std::string gameName) {
 
     std::istringstream input(contents);
 
-    while(getline(input, line)) {
+    while (getline(input, line)) {
         std::istringstream l(line);
         std::vector<int> ld;
-        while(getline(l, field, ',')) {
+        while (getline(l, field, ',')) {
             ld.push_back(std::stoi(field));
         }
         board.push_back(ld);
@@ -73,17 +58,43 @@ Gameboard* BoardInitializer::create(std::string gameName) {
 
     auto gb = new Gameboard(board.size()); // since the board has to be quadratic
 
-    for(int col = 0; col < board.size(); ++col) {
-        for(int row = 0; row < board.size(); ++row) {
-            int val = board[row][col];
-            if(val > 0)
-                gb->nextMove(col, row, val);
+    for (int row = 0; row < board.size(); ++row) {
+        for (int column = 0; column < board.size(); ++column) {
+            int val = board[row][column];
+            if (val > 0)
+                gb->nextMove(column, row, board[row][column]);
         }
     }
-
     return gb;
 }
 
 char **BoardInitializer::getGamesSelection() {
     return nullptr;
+}
+
+std::vector<Gameboard *> BoardInitializer::create() {
+    std::string directory;
+    std::vector<std::string> paths;
+    std::vector<Gameboard *> boards;
+    char *confDir = std::getenv("SUDOKU_CONF");
+
+    if (confDir == NULL) throw new env_not_set_exception;
+
+    directory.append(confDir);
+
+    DIR *dir;
+    struct dirent *ent;
+    if ((dir = opendir(confDir)) != NULL) {
+        // adding directory path for absolute path
+        while ((ent = readdir(dir)) != NULL) paths.push_back(directory + ent->d_name);
+        closedir(dir);
+        paths.erase(paths.begin(), paths.begin() + 2);
+
+    } else {
+        throw new directory_not_found_exception;
+    }
+
+    for (auto const itr : paths) boards.push_back(create(itr));
+
+    return boards;
 }

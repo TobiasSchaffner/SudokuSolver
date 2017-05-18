@@ -11,7 +11,8 @@ int main() {
 
     auto binit = new BoardInitializer();
 
-    auto gameboard = binit->create("game-a.su");
+    auto gameboard = binit->create().back();
+
     printBoard((unsigned int **) gameboard->get2DArray(), gameboard->getSize());
 
     auto solver = new TobiSolver(gameboard);
@@ -24,24 +25,6 @@ int main() {
     } else {
         std::cout << "Unsolvable";
     }
-    std::cout << std::endl;
-
-
-    printBoard((unsigned int **) gameboard->get2DArray(), gameboard->getSize());
-
-
-
-
-//printBoard((unsigned int**) gameboard->get2DArray(), gameboard->getSize());
-/*
-while(gameboard->evaluateNext()) {
-    printBoard(gameboard->get2DArray(), 9);
-    printBoard(gameboard->getClasses(), 9);
-}
-
-
-printBoard(gameboard->get2DArray(), 9);
-*/
 
     return 0;
 }
