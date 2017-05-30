@@ -1,37 +1,20 @@
 #include <iostream>
 #include <board-initializer.h>
-#include <tobi-solver.h>
-#include <flo-solver.h>
+#include <solver.h>
 #include <util.h>
-#include <exception/no-such-move-exception.h>
 
 using namespace std;
 
 int main() {
+    auto boardInitializer = new BoardInitializer();
+    auto gameboard = boardInitializer->create("/home/platypus/CLionProjects/sudoku/conf/game-a.su");
 
-    auto binit = new BoardInitializer();
+    print2DArray(gameboard->get2DArray(), gameboard->getSize());
 
-    auto gameboard = binit->create("/home/confix/Projects/cpp/sudoku/conf/game-a.su");
+    auto solver = new Solver(gameboard);
+    solver->solve();
 
-    printBoard((unsigned int **) gameboard->get2DArray(), gameboard->getSize());
-
-    auto solver = new FloSolver(gameboard);
-
-
-    while (solver->evaluateNext()) {
-        printBoard((unsigned int **) gameboard->get2DArray(), gameboard->getSize());
-
-    }
-
-
-    printBoard((unsigned int **) gameboard->get2DArray(), gameboard->getSize());
-
-
-    if (gameboard->isSolved()) {
-        std::cout << "Solved";
-    } else {
-        std::cout << "Unsolvable";
-    }
+    print2DArray(gameboard->get2DArray(), gameboard->getSize());
 
     return 0;
 }

@@ -1,15 +1,18 @@
-//
-// Created by confix on 5/3/17.
-//
-
-#ifndef SUDOKU_SOLVER_H
-#define SUDOKU_SOLVER_H
+#ifndef SOLVER_H
+#define SOLVER_H
 
 
 class Solver {
+
+private:
+    Gameboard* gameboard;
 public:
-    virtual bool evaluateNext() = 0;
+
+    Solver(Gameboard* gameboard);
+    ~Solver();
+
+    bool solve();
+
 };
 
-
-#endif //SUDOKU_SOLVER_H
+#endif

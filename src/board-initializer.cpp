@@ -61,8 +61,10 @@ Gameboard *BoardInitializer::create(std::string gameName) {
     for (int row = 0; row < board.size(); ++row) {
         for (int column = 0; column < board.size(); ++column) {
             int val = board[row][column];
-            if (val > 0)
-                gb->nextMove(column, row, val);
+            if (val > 0) {
+                Move* move = new Move(column, row, val);
+                gb->applyMove(move);
+            }
         }
     }
     return gb;

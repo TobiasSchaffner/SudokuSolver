@@ -1,116 +1,84 @@
-#include <cmath>
 #include "../include/gameboard.h"
 #include "util.h"
 
 Gameboard::Gameboard(unsigned int size) {
-    const unsigned int arrayLen = size;
-
-    this->rows = new unsigned short[arrayLen]{0};
-    this->columns = new unsigned short[arrayLen]{0};
-    this->segments = new unsigned short[arrayLen]{0};
+    // other sizes not implemented yet
+    assert(size == 9 && "Other sizes than 9 not yet implemented!");
 
     this->size = size;
     this->boardData = new int*[size];
     for(int i = 0; i < size; ++i)
         this->boardData[i] = new int[size]{0};
-
-    this->segLength = (unsigned int) sqrt(size);
-    this->max_possibles = (1 << size) - 1;
 }
 
 Gameboard::~Gameboard() {
-    delete(this->rows);
-    delete(this->columns);
-    delete(this->segments);
     for(int i = 0; i < this->size; ++i)
         delete(this->boardData[i]);
     delete(this->boardData);
 }
 
-
-bool Gameboard::nextMove(unsigned short column, unsigned short row, unsigned short value) {
-
-    assert(0 <= column < this->size);
-    assert(0 <= row < this->size);
-    assert(0 <= value < this->size);
-
-    bool moveValid = false;
-    const unsigned short mask = (1 << (value - 1));
-    if((mask & this->getPossibleMoves(column, row)) == mask) {
-        Move nextMove(column, row, mask);
-        next(nextMove);
-        this->boardData[row][column] = value;
-        moveValid = true;
+bool Gameboard::getEmptyField(Move *move) {
+    for (move->row = 0; move->row < size; move->row++) {
+        for (move->column = 0; move->column < size; move->column++) {
+            if (boardData[move->column][move->row] == 0) {
+                return true;
+            }
+        }
     }
-
-    return moveValid;
+    return false;
 }
 
-void Gameboard::revertMove(Move m) {
-    const int seg = getSegmentNumber(m.column, m.row);
-    // apply reverse bitmask to rol/col/seg information
-    int colB = this->columns[m.column];
-    int rowB = this->rows[m.row];
-    int segB = this->segments[seg];
-    this->columns[m.column] = this->columns[m.column] - (1 << (m.value - 1));
-    this->rows[m.row] = this->rows[m.row] - (1 << (m.value - 1));
-    this->segments[seg] = this->segments[seg] - (1 << (m.value - 1));
+void Gameboard::applyMove(Move* move) {
+    assert(0 <= move->column < this->size);
+    assert(0 <= move->row < this->size);
+    assert(0 <= move->value < this->size);
 
-    int colA = this->columns[m.column];
-    int rowA = this->rows[m.row];
-    int segA = this->segments[seg];
-    this->boardData[m.column][m.row] = 0;
+    this->boardData[move->column][move->row] = move->value;
 }
 
-
-void Gameboard::next(Move move) {
-    const unsigned short seg = getSegmentNumber(move.column, move.row);
-    this->columns[move.column] = this->columns[move.column] | move.value;
-    this->rows[move.row] = this->rows[move.row] | move.value;
-    this->segments[seg] = this->segments[seg] | move.value;
+void Gameboard::revertMove(Move* move) {
+    this->boardData[move->column][move->row] = 0;
 }
 
-
-const unsigned short Gameboard::getPossibleMoves(unsigned short column, unsigned short row) const {
-
-    if(!this->isPosInBounds(column)) {
-        char res[50];
-        std::sprintf(res, this->MS_ERR_COL, column);
-        throw new std::invalid_argument(res);
+bool Gameboard::checkRow(Move* move) {
+    for (int col = 0; col < size; col++) {
+        if (boardData[col][move->row] == move->value) {
+            return true;
+        }
     }
-
-    if(!this->isPosInBounds(row)) {
-        char res[50];
-        std::sprintf(res, this->MS_ERR_ROW, row);
-        throw new std::invalid_argument(res);
-    }
-
-    const unsigned short seg = getSegmentNumber(column, row);
-
-    int r = rows[row];
-    int c = columns[column];
-    int s = segments[seg];
-    int mp = this->max_possibles;
-    int currVal = this->boardData[row][column];
-    return (unsigned short) this->boardData[row][column] != 0 ? 0 : this->max_possibles - (
-            rows[row] | columns[column] | segments[seg]);
+    return false;
 }
 
-bool Gameboard::isSolved() {
-    for(int i = 0; i < this->size; ++i) {
-        if(this->max_possibles != (this->rows[i] & this->columns[i] & this->segments[i])) return false;
+bool Gameboard::checkColumn(Move* move) {
+    for (int row = 0; row < size; row++) {
+        if (boardData[move->column][row] == move->value) {
+            return true;
+        }
     }
-    return true;
+    return false;
+}
+
+bool Gameboard::checkField(Move* move) {
+    for (int rowOffset = 0; rowOffset < 3; rowOffset++) {
+        for (int columnOffset = 0; columnOffset < 3; columnOffset++) {
+            if (boardData[getSegmentStart(move->column) + columnOffset][getSegmentStart(move->row) + rowOffset] == move->value) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool Gameboard::isPossible(Move* move) {
+    return !checkRow(move) &&
+           !checkColumn(move) &&
+           !checkField(move);
 }
 
 int** Gameboard::get2DArray() const {
     return this->boardData;
 }
 
-bool Gameboard::isPosInBounds(unsigned short pos) const {
-    return 0 <= pos < this->size;
-}
-
-unsigned const int Gameboard::getSize() const {{}
+int Gameboard::getSize() const {
     return this->size;
 }
