@@ -52,7 +52,8 @@ bool Gameboard::revertMove(Move m) {
     const int seg = getSegmentNumber(m.column, m.row);
 
     // If already 0 do nothing
-    if (boardData[m.column][m.row] == 0)
+    //todo hab hier jetzt die Indizes vertauscht, sonst funktioniert der revert nicht. Mal prüfen...
+    if (boardData[m.row][m.column] == 0)
         return false;
 
     // apply reverse bitmask to rol/col/seg information
@@ -62,7 +63,8 @@ bool Gameboard::revertMove(Move m) {
     this->rows[m.row] = this->rows[m.row] - (1 << (m.value - 1));
     this->segments[seg] = this->segments[seg] - (1 << (m.value - 1));
 
-    this->boardData[m.column][m.row] = 0;
+    //todo hab hier jetzt die Indizes vertauscht, sonst funktioniert der revert nicht. Mal prüfen...
+    this->boardData[m.row][m.column] = 0;
     return true;
 }
 

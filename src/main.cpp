@@ -9,7 +9,7 @@ int main() {
 
     auto binit = new BoardInitializer();
 
-    auto gameboard = binit->create("/home/platypus/CLionProjects/sudoku/conf/game-a.su");
+    auto gameboard = binit->create("C:\\Users\\Johannes\\CLionProjects\\blatt-2-sudoku07-1\\conf\\game-a.su");
 
     printBoard((unsigned int **) gameboard->get2DArray(), gameboard->getSize());
 
