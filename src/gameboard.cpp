@@ -39,6 +39,8 @@ bool Gameboard::nextMove(unsigned short column, unsigned short row, unsigned sho
     if((mask & this->getPossibleMoves(column, row)) == mask) {
         Move nextMove(column, row, mask);
         next(nextMove);
+
+        // TODO ERROR nach Konvention liegen die Daten in boardData nach [column][row] vor. Das scheint mir hier nicht richtig zu sein.
         this->boardData[row][column] = value;
         moveValid = true;
     }
@@ -46,22 +48,23 @@ bool Gameboard::nextMove(unsigned short column, unsigned short row, unsigned sho
     return moveValid;
 }
 
-void Gameboard::revertMove(Move m) {
+bool Gameboard::revertMove(Move m) {
     const int seg = getSegmentNumber(m.column, m.row);
+
+    // If already 0 do nothing
+    if (boardData[m.column][m.row] == 0)
+        return false;
+
     // apply reverse bitmask to rol/col/seg information
-    int colB = this->columns[m.column];
-    int rowB = this->rows[m.row];
-    int segB = this->segments[seg];
+
+    //TODO ERROR value liegt meiner Meinung nach schon als Bitmaske vor. Siehe nextMove. Hier wird aber trotzdem nochmal zu ner bitmaske geschiftet.
     this->columns[m.column] = this->columns[m.column] - (1 << (m.value - 1));
     this->rows[m.row] = this->rows[m.row] - (1 << (m.value - 1));
     this->segments[seg] = this->segments[seg] - (1 << (m.value - 1));
 
-    int colA = this->columns[m.column];
-    int rowA = this->rows[m.row];
-    int segA = this->segments[seg];
     this->boardData[m.column][m.row] = 0;
+    return true;
 }
-
 
 void Gameboard::next(Move move) {
     const unsigned short seg = getSegmentNumber(move.column, move.row);
@@ -91,6 +94,8 @@ const unsigned short Gameboard::getPossibleMoves(unsigned short column, unsigned
     int c = columns[column];
     int s = segments[seg];
     int mp = this->max_possibles;
+
+    // TODO ERROR nach Konvention liegen die Daten in boardData nach [column][row] vor. Das scheint mir hier nicht richtig zu sein.
     int currVal = this->boardData[row][column];
     return (unsigned short) this->boardData[row][column] != 0 ? 0 : this->max_possibles - (
             rows[row] | columns[column] | segments[seg]);

@@ -54,7 +54,7 @@ public:
      * Revert the last step.
      * @return True is reverted. False if there is nothing to revert.
      */
-    void revertMove(Move move);
+    bool revertMove(Move move);
 
     bool isSolved();
 

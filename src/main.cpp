@@ -1,9 +1,7 @@
 #include <iostream>
 #include <board-initializer.h>
-#include <tobi-solver.h>
-#include <flo-solver.h>
+#include "../include/solver.h"
 #include <util.h>
-#include <exception/no-such-move-exception.h>
 
 using namespace std;
 
@@ -11,11 +9,11 @@ int main() {
 
     auto binit = new BoardInitializer();
 
-    auto gameboard = binit->create("/home/confix/Projects/cpp/sudoku/conf/game-a.su");
+    auto gameboard = binit->create("/home/platypus/CLionProjects/sudoku/conf/game-a.su");
 
     printBoard((unsigned int **) gameboard->get2DArray(), gameboard->getSize());
 
-    auto solver = new FloSolver(gameboard);
+    auto solver = new Solver(gameboard);
 
 
     while (solver->evaluateNext()) {

@@ -6,6 +6,7 @@
 
 struct Move {
 
+    Move();
     /**
      * Creates a Step Object.
      * @param column Column index from 0 to 8.

@@ -5,10 +5,10 @@
 #include <gameboard.h>
 #include <util.h>
 #include <exception/no-such-move-exception.h>
-#include "flo-solver.h"
+#include "solver.h"
 
 
-FloSolver::FloSolver(Gameboard *board) {
+Solver::Solver(Gameboard *board) {
     if (board == NULL)
         throw std::invalid_argument("Whatever");
     this->board = board;
@@ -16,7 +16,13 @@ FloSolver::FloSolver(Gameboard *board) {
     this->waypoints = new std::stack<int>();
 }
 
-bool FloSolver::evaluateNext() {
+bool Solver::solve() {
+    bool result;
+    while(result = evaluateNext());
+    return result;
+}
+
+bool Solver::evaluateNext() {
     bool result = true;
     try {
         makeNextMove();
@@ -29,7 +35,7 @@ bool FloSolver::evaluateNext() {
     return result;
 }
 
-void FloSolver::makeNextMove() {
+void Solver::makeNextMove() {
     Move m = this->getNextMove();
 
     assert(this->board->nextMove(m.column, m.row, m.value));
@@ -37,7 +43,7 @@ void FloSolver::makeNextMove() {
     this->moves->push(Kp{m, (1 << (m.value - 1))});
 }
 
-bool FloSolver::trackBack() {
+bool Solver::trackBack() {
     bool wasSuccess = false;
 
     if (!this->waypoints->empty()) {
@@ -67,7 +73,7 @@ bool FloSolver::trackBack() {
 }
 
 
-Move FloSolver::getNextMove() const {
+Move Solver::getNextMove() const {
     int min = 10;
     int rowPos = -1;
     int colPos = -1;
