@@ -42,7 +42,7 @@ public:
      * Revert a move.
      * @param move Pointer to a move object that shuld be reverted.
      */
-    void revertMove(Move* move);
+     bool revertMove(Move* move);
 
     /**
      * Check if a number can be set at a certain position.

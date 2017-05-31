@@ -36,8 +36,10 @@ void Gameboard::applyMove(Move* move) {
     this->boardData[move->column][move->row] = move->value;
 }
 
-void Gameboard::revertMove(Move* move) {
+bool Gameboard::revertMove(Move* move) {
+    if (this->boardData[move->column][move->row] == 0) return false;
     this->boardData[move->column][move->row] = 0;
+    return true;
 }
 
 bool Gameboard::checkRow(Move* move) {
