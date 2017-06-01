@@ -4,6 +4,7 @@
 #include <sstream>
 #include <cstring>
 #include <dirent.h>
+#include <map>
 
 
 #if defined(WIN32) || defined(_WIN32)
@@ -72,29 +73,32 @@ char **BoardInitializer::getGamesSelection() {
     return nullptr;
 }
 
-std::vector<Gameboard *> BoardInitializer::create() {
+std::map<int,std::string> BoardInitializer::create() {
+    std::map<int,std::string> path;
     std::string directory;
-    std::vector<std::string> paths;
-    std::vector<Gameboard *> boards;
     char *confDir = std::getenv("SUDOKU_CONF");
 
     if (confDir == NULL) throw new env_not_set_exception;
 
     directory.append(confDir);
 
+    if (strcmp(&directory.back(), PATH_SEPARATOR) != 0)
+        directory.append(PATH_SEPARATOR);
+
     DIR *dir;
     struct dirent *ent;
     if ((dir = opendir(confDir)) != NULL) {
+        int index = 0;
         // adding directory path for absolute path
-        while ((ent = readdir(dir)) != NULL) paths.push_back(directory + ent->d_name);
+        while ((ent = readdir(dir)) != NULL) {
+            if (strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0)
+                path.insert(std::make_pair(index++,directory+ent->d_name));
+//                paths.push_back(directory + ent->d_name);
+        }
         closedir(dir);
-        paths.erase(paths.begin(), paths.begin() + 2);
 
     } else {
         throw new directory_not_found_exception;
     }
-
-    for (auto const itr : paths) boards.push_back(create(itr));
-
-    return boards;
+    return path;
 }
