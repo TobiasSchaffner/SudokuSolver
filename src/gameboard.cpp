@@ -9,12 +9,19 @@ Gameboard::Gameboard(unsigned int size) {
     this->boardData = new int*[size];
     for(int i = 0; i < size; ++i)
         this->boardData[i] = new int[size]{0};
+
+    this->rows = new unsigned short[size]{0};
+    this->columns = new unsigned short[size]{0};
+    this->segments = new unsigned short[size]{0};
 }
 
 Gameboard::~Gameboard() {
     for(int i = 0; i < this->size; ++i)
         delete(this->boardData[i]);
     delete(this->boardData);
+    delete(this->rows);
+    delete(this->columns);
+    delete(this->segments);
 }
 
 bool Gameboard::getEmptyField(Move *move) {
@@ -28,17 +35,34 @@ bool Gameboard::getEmptyField(Move *move) {
     return false;
 }
 
+void Gameboard::applyBitMasks(Move *move) {
+    const unsigned short seg = getSegmentNumber(move->column, move->row);
+    this->columns[move->column] = this->columns[move->column] | (1 << (move->value - 1));
+    this->rows[move->row] = this->rows[move->row] | (1 << (move->value - 1));
+    this->segments[seg] = this->segments[seg] | (1 << (move->value - 1));
+}
+
 void Gameboard::applyMove(Move* move) {
     assert(0 <= move->column < this->size);
     assert(0 <= move->row < this->size);
     assert(0 <= move->value < this->size);
 
     this->boardData[move->column][move->row] = move->value;
+    applyBitMasks(move);
+}
+
+void Gameboard::revertBitMasks(Move *m) {
+    const int seg = getSegmentNumber(m->column, m->row);
+
+    this->columns[m->column] = this->columns[m->column] - (1 << (m->value - 1));
+    this->rows[m->row] = this->rows[m->row] - (1 << (m->value - 1));
+    this->segments[seg] = this->segments[seg] - (1 << (m->value - 1));
 }
 
 bool Gameboard::revertMove(Move* move) {
     if (this->boardData[move->column][move->row] == 0) return false;
     this->boardData[move->column][move->row] = 0;
+    revertBitMasks(move);
     return true;
 }
 
@@ -83,4 +107,12 @@ int** Gameboard::get2DArray() const {
 
 int Gameboard::getSize() const {
     return this->size;
+}
+
+const unsigned short Gameboard::getPossibleMoves(unsigned short column, unsigned short row) const {
+
+    const unsigned short seg = getSegmentNumber(column, row);
+
+    return (unsigned short) this->boardData[column][row] != 0 ? 0 : (
+            rows[row] | columns[column] | segments[seg]);
 }

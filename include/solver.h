@@ -5,10 +5,14 @@
 class Solver {
 
 private:
-    Gameboard* gameboard;
+    Gameboard *gameboard;
+
+    bool getNextMove(Move*);
+
 public:
 
-    Solver(Gameboard* gameboard);
+    Solver(Gameboard *gameboard);
+
     ~Solver();
 
     bool solve();

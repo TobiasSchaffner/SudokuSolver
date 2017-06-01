@@ -11,9 +11,18 @@ private:
     unsigned int size;
     int** boardData;
 
+    unsigned short *rows;
+    unsigned short *columns;
+    unsigned short *segments;
+
+    unsigned int max_possibles;
+
     bool checkRow(Move* move);
     bool checkColumn(Move* move);
     bool checkField(Move* move);
+
+    void revertBitMasks(Move *m);
+    void applyBitMasks(Move *);
 
 public:
     Gameboard(unsigned int size);
@@ -25,11 +34,14 @@ public:
      */
     int getSize() const;
 
-    /**
-     * Search for an empty field.
-     * @param move Pointer to a move object that will be filled with the data.
-     * @return true if an empty field was found else otherwise.
-     */
+    const unsigned short getPossibleMoves(unsigned short column, unsigned short row) const;
+
+
+        /**
+         * Search for an empty field.
+         * @param move Pointer to a move object that will be filled with the data.
+         * @return true if an empty field was found else otherwise.
+         */
     bool getEmptyField(Move* move);
 
     /**

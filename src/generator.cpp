@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <algorithm>
 #include <ctime>
+#include <util.h>
 #include "../include/gameboard.h"
 #include "../include/generator.h"
 #include "../include/solver.h"
@@ -21,7 +22,6 @@ Gameboard* Generator::generate(int size, int solved) {
         auto solver = new Solver(gameboard);
         solvableGameboardCreated = solver->solve();
     }
-
     randomRemove(gameboard, solved);
 
     return gameboard;
