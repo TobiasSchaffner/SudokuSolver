@@ -7,18 +7,33 @@
 using namespace std;
 
 int main() {
-    //auto boardInitializer = new BoardInitializer();
-    //auto gameboard = boardInitializer->create("/home/platypus/CLionProjects/sudoku/conf/game-a.su");
+    auto binit = new BoardInitializer();
 
-    auto generator = new Generator();
-    auto gameboard = generator->generate(9, 50);
+    //auto generator = new Generator();
+    //auto gameboard = generator->generate(9, 50);
 
-    print2DArray(gameboard->get2DArray(), gameboard->getSize());
+    std::map<int, std::string> paths = binit->create();
+    for (auto const itr :paths)
+        cout << itr.first << ": " << itr.second.substr(itr.second.find_last_of("/\\"),itr.second.size()) << endl;
 
-    auto solver = new Solver(gameboard);
-    solver->solve();
 
-    print2DArray(gameboard->get2DArray(), gameboard->getSize());
+    int index;
+    while (index != -1) {
+        cout << "Choose the sudoku you want to solve: " << endl;
+        cin >> index;
+        if (cin.fail() || index >= paths.size()) {
+            cout << "Please try again!: " << endl;
+            cin.clear();
+            cin.ignore(256, '\n');
+        }else{
+            auto gameboard = binit->create(paths[index]);
+
+            print2DArray(gameboard->get2DArray(), 9);
+            auto solver = new Solver(gameboard);
+            solver->solve();
+            print2DArray(gameboard->get2DArray(), 9);
+        }
+    }
 
     return 0;
 }

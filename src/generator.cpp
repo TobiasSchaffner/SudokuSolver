@@ -4,9 +4,10 @@
 
 #include <assert.h>
 #include <algorithm>
-#include <gameboard.h>
 #include <ctime>
-#include "generator.h"
+#include "../include/gameboard.h"
+#include "../include/generator.h"
+#include "../include/solver.h"
 
 static int iteration = 1;
 

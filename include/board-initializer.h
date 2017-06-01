@@ -9,6 +9,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include "gameboard.h"
 
 class BoardInitializer {
@@ -17,9 +18,9 @@ public:
 
     char **getGamesSelection();
 
-    /** Builds the gameboards to the given files.
-     * Reading the directory path form environment variable: SUDOKU_CONF
+    /** Returns a map with the absolute paths of all files in the given directory.
+     * Reading the directory path form environment variable: SUDOKU_CONF.
      */
-    std::vector<Gameboard *> create();
+    std::map<int, std::string> create();
 };
 
