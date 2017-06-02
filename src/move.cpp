@@ -1,9 +1,9 @@
-#include "move.h"
+#include "../include/move.h"
 
 Move::Move() {
-    this->column = 0;
-    this->row = 0;
-    this->value = 0;
+    column = 0;
+    row = 0;
+    value = 0;
 }
 
 Move::Move(int column, int row, int value) {

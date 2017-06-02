@@ -1,16 +1,13 @@
-
 #include <board-initializer.h>
 #include <fstream>
 #include <sstream>
 #include <cstring>
 #include <dirent.h>
-#include <map>
-
 
 #if defined(WIN32) || defined(_WIN32)
-#define PATH_SEPARATOR "\\"
+    #define PATH_SEPARATOR "\\"
 #else
-#define PATH_SEPARATOR "/"
+    #define PATH_SEPARATOR "/"
 #endif
 
 class file_not_found_exception : public std::exception {
@@ -57,7 +54,7 @@ Gameboard *BoardInitializer::create(std::string gameName) {
         board.push_back(ld);
     }
 
-    auto gb = new Gameboard(board.size()); // since the board has to be quadratic
+    auto gb = new Gameboard((int) board.size()); // since the board has to be quadratic
 
     for (int row = 0; row < board.size(); ++row) {
         for (int column = 0; column < board.size(); ++column) {

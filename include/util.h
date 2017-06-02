@@ -3,9 +3,9 @@
 
 void print2DArray(int **array, int size);
 
-unsigned short getSegmentStart(int index);
+int getSegmentStart(int index);
 
-unsigned short getSegmentNumber(unsigned short column, unsigned short row);
+int getSegmentNumber(int column, int row);
 
 
 #endif

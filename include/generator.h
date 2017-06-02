@@ -9,10 +9,12 @@
 #include "solver.h"
 
 class Generator {
+
 private:
     int* randomArray(int size);
     Gameboard* getSeededGameboard(int size);
     void randomRemove(Gameboard* gameboard, int solved);
+
 public:
     Gameboard* generate(int size, int solved);
 };
