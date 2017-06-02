@@ -34,6 +34,8 @@ project(sudokuTest)
 
 
 set(SOURCE_FILES, src/gameboard-test.cpp)
+set(SOURCE_FILES, src/generator_test.cpp)
+set(SOURCE_FILES, src/solver_test.cpp)
 
-add_executable(sudokuTest src/gameboard-test.cpp src/main.cpp ../src/util.cpp ../src/generator.cpp ../include/generator.h)
+add_executable(sudokuTest src/gameboard-test.cpp src/main.cpp ../src/util.cpp ../src/generator.cpp ../include/generator.h src/generator_test.cpp src/solver_test.cpp)
 target_link_libraries(sudokuTest sudokuShared gtest)
