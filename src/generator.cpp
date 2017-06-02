@@ -1,14 +1,8 @@
-//
-// Created by platypus on 5/31/17.
-//
-
 #include <assert.h>
 #include <algorithm>
 #include <ctime>
-#include <util.h>
 #include "../include/gameboard.h"
 #include "../include/generator.h"
-#include "../include/solver.h"
 
 static int iteration = 1;
 
@@ -28,7 +22,7 @@ Gameboard* Generator::generate(int size, int solved) {
 }
 
 void Generator::randomRemove(Gameboard* gameboard, int solved) {
-    Move* move = new Move();
+    auto move = new Move();
     for (int i = 0; i < gameboard->getSize() * gameboard->getSize() - solved; i++) {
         move->row = rand() % gameboard->getSize();
         move->column = rand() % gameboard->getSize();
@@ -56,6 +50,7 @@ Gameboard* Generator::getSeededGameboard(int size) {
 
     auto move = new Move();
 
+    move->row = 0;
     for (move->column = 0; move->column < size; move->column++) {
         move->value = firstRowValues[move->column];
         gameboard->applyMove(move);

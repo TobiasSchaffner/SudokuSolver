@@ -11,21 +11,21 @@ private:
     unsigned int size;
     int** boardData;
 
-    unsigned short *rows;
-    unsigned short *columns;
-    unsigned short *segments;
-
-    unsigned int max_possibles;
+    int *rows;
+    int *columns;
+    int *segments;
 
     bool checkRow(Move* move);
     bool checkColumn(Move* move);
     bool checkField(Move* move);
 
-    void revertBitMasks(Move *m);
-    void applyBitMasks(Move *);
+    void revertBitMasks(Move* move);
+    void applyBitMasks(Move* move);
+
+    int getSetPositions(int column, int row);
 
 public:
-    Gameboard(unsigned int size);
+    Gameboard(int size);
     ~Gameboard();
 
     /**
@@ -34,15 +34,19 @@ public:
      */
     int getSize() const;
 
-    const unsigned short getPossibleMoves(unsigned short column, unsigned short row) const;
+    /**
+     * Search for the Position with the most set Positions around.
+     * @param move Pointer to a move object that will be filled with the data.
+     * @return true if an empty firld was found false otherwise.
+     */
+    bool getPromisingMove(Move *move);
 
-
-        /**
-         * Search for an empty field.
-         * @param move Pointer to a move object that will be filled with the data.
-         * @return true if an empty field was found else otherwise.
-         */
-    bool getEmptyField(Move* move);
+    /**
+     * Search for an empty field.
+     * @param move Pointer to a move object that will be filled with the data.
+     * @return true if an empty field was found false otherwise.
+     */
+    bool getFirstEmptyMove(Move *move);
 
     /**
      * Set the value in the move object at the position set in the move object.

@@ -7,16 +7,10 @@ class Solver {
 private:
     Gameboard *gameboard;
 
-    bool getNextMove(Move*);
-
 public:
-
     Solver(Gameboard *gameboard);
-
     ~Solver();
-
     bool solve();
-
 };
 
 #endif

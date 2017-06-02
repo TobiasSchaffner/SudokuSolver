@@ -1,30 +1,30 @@
 #include "../include/gameboard.h"
-#include "util.h"
+#include "../include/util.h"
 
-Gameboard::Gameboard(unsigned int size) {
+Gameboard::Gameboard(int size) {
     // other sizes not implemented yet
     assert(size == 9 && "Other sizes than 9 not yet implemented!");
 
     this->size = size;
-    this->boardData = new int*[size];
+    boardData = new int*[size];
     for(int i = 0; i < size; ++i)
-        this->boardData[i] = new int[size]{0};
+        boardData[i] = new int[size]{0};
 
-    this->rows = new unsigned short[size]{0};
-    this->columns = new unsigned short[size]{0};
-    this->segments = new unsigned short[size]{0};
+    rows = new int[size]{0};
+    columns = new int[size]{0};
+    segments = new int[size]{0};
 }
 
 Gameboard::~Gameboard() {
     for(int i = 0; i < this->size; ++i)
-        delete(this->boardData[i]);
-    delete(this->boardData);
-    delete(this->rows);
-    delete(this->columns);
-    delete(this->segments);
+        delete(boardData[i]);
+    delete(boardData);
+    delete(rows);
+    delete(columns);
+    delete(segments);
 }
 
-bool Gameboard::getEmptyField(Move *move) {
+bool Gameboard::getFirstEmptyMove(Move *move) {
     for (move->row = 0; move->row < size; move->row++) {
         for (move->column = 0; move->column < size; move->column++) {
             if (boardData[move->column][move->row] == 0) {
@@ -35,11 +35,11 @@ bool Gameboard::getEmptyField(Move *move) {
     return false;
 }
 
-void Gameboard::applyBitMasks(Move *move) {
-    const unsigned short seg = getSegmentNumber(move->column, move->row);
-    this->columns[move->column] = this->columns[move->column] | (1 << (move->value - 1));
-    this->rows[move->row] = this->rows[move->row] | (1 << (move->value - 1));
-    this->segments[seg] = this->segments[seg] | (1 << (move->value - 1));
+void Gameboard::applyBitMasks(Move* move) {
+    int seg = getSegmentNumber(move->column, move->row);
+    columns[move->column] = columns[move->column] | (1 << (move->value - 1));
+    rows[move->row] = rows[move->row] | (1 << (move->value - 1));
+    segments[seg] = segments[seg] | (1 << (move->value - 1));
 }
 
 void Gameboard::applyMove(Move* move) {
@@ -51,17 +51,20 @@ void Gameboard::applyMove(Move* move) {
     applyBitMasks(move);
 }
 
-void Gameboard::revertBitMasks(Move *m) {
-    const int seg = getSegmentNumber(m->column, m->row);
-
-    this->columns[m->column] = this->columns[m->column] - (1 << (m->value - 1));
-    this->rows[m->row] = this->rows[m->row] - (1 << (m->value - 1));
-    this->segments[seg] = this->segments[seg] - (1 << (m->value - 1));
+void Gameboard::revertBitMasks(Move* move) {
+    int seg = getSegmentNumber(move->column, move->row);
+    columns[move->column] = columns[move->column] - (1 << (move->value - 1));
+    rows[move->row] = rows[move->row] - (1 << (move->value - 1));
+    segments[seg] = segments[seg] - (1 << (move->value - 1));
 }
 
 bool Gameboard::revertMove(Move* move) {
-    if (this->boardData[move->column][move->row] == 0) return false;
-    this->boardData[move->column][move->row] = 0;
+    assert(0 <= move->column < this->size);
+    assert(0 <= move->row < this->size);
+    assert(0 <= move->value < this->size);
+
+    if (boardData[move->column][move->row] == 0) return false;
+    boardData[move->column][move->row] = 0;
     revertBitMasks(move);
     return true;
 }
@@ -102,17 +105,31 @@ bool Gameboard::isPossible(Move* move) {
 }
 
 int** Gameboard::get2DArray() const {
-    return this->boardData;
+    return boardData;
 }
 
 int Gameboard::getSize() const {
-    return this->size;
+    return size;
 }
 
-const unsigned short Gameboard::getPossibleMoves(unsigned short column, unsigned short row) const {
+bool Gameboard::getPromisingMove(Move *move) {
+    int max = 0;
 
-    const unsigned short seg = getSegmentNumber(column, row);
+    for (int column = 0; column < getSize(); column++) {
+        for (int row = 0; row < getSize(); row++) {
+            int possibles = getSetPositions(column, row);
+            if (possibles > max) {
+                move->column = column;
+                move->row = row;
+                max = possibles;
+            }
+        }
+    }
+    return max > 0;
+}
 
-    return (unsigned short) this->boardData[column][row] != 0 ? 0 : (
-            rows[row] | columns[column] | segments[seg]);
+int Gameboard::getSetPositions(int column, int row) {
+    int seg = getSegmentNumber(column, row);
+    int possibles = boardData[column][row] != 0 ? 0 : (rows[row] | columns[column] | segments[seg]);
+    return __builtin_popcount(possibles);
 }

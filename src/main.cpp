@@ -1,17 +1,17 @@
 #include <iostream>
-#include <board-initializer.h>
-#include <solver.h>
-#include <util.h>
-#include <generator.h>
+#include <../include/board-initializer.h>
+#include <../include/util.h>
+#include <../include/generator.h>
 
 using namespace std;
 
 int main() {
-    auto binit = new BoardInitializer();
+    //auto binit = new BoardInitializer();
 
-    //auto generator = new Generator();
-    //auto gameboard = generator->generate(9, 50);
-
+    auto generator = new Generator();
+    auto gameboard = generator->generate(9, 81);
+    print2DArray(gameboard->get2DArray(), 9);
+/*
     std::map<int, std::string> paths = binit->create();
     for (auto const itr :paths)
         cout << itr.first << ": " << itr.second.substr(itr.second.find_last_of("/\\"),itr.second.size()) << endl;
@@ -34,6 +34,7 @@ int main() {
             print2DArray(gameboard->get2DArray(), 9);
         }
     }
+    */
 
     return 0;
 }
