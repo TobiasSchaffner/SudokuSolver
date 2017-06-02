@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <algorithm>
 #include <ctime>
+#include <chrono>
 #include "../include/gameboard.h"
 #include "../include/generator.h"
 
@@ -37,7 +38,7 @@ void Generator::randomRemove(Gameboard* gameboard, int solved) {
 int* Generator::randomArray(int size) {
     int* numbers = new int[size];
     for (int i = 0; i < size; i++) numbers[i] = i + 1;
-    std::srand(std::time(0) / iteration);
+    std::srand(std::chrono::high_resolution_clock::now().time_since_epoch().count());
     iteration++;
     std::random_shuffle(&numbers[0], &numbers[size]);
     return numbers;
