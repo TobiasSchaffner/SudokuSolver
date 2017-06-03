@@ -5,8 +5,6 @@
 #include "../include/gameboard.h"
 #include "../include/generator.h"
 
-static int iteration = 1;
-
 Gameboard* Generator::generate(int size, int solved) {
     assert(size * size >= solved);
     Gameboard* gameboard;
@@ -39,7 +37,6 @@ int* Generator::randomArray(int size) {
     int* numbers = new int[size];
     for (int i = 0; i < size; i++) numbers[i] = i + 1;
     std::srand(std::chrono::high_resolution_clock::now().time_since_epoch().count());
-    iteration++;
     std::random_shuffle(&numbers[0], &numbers[size]);
     return numbers;
 }
