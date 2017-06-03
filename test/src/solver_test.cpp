@@ -1,3 +1,4 @@
+#include <chrono>
 #include "gtest/gtest.h"
 #include "../../include/gameboard.h"
 #include "../../include/generator.h"
@@ -26,21 +27,50 @@ protected:
         return true;
     }
 
+
+
     static Generator *generator;
 };
 
 Generator *SolverTest::generator = NULL;
 
+static constexpr int nearlyfullGameboard[9][9] = {{ 0,  0,  0,  0,  5,  0,  8,  0,  0},
+                                                  { 2,  0,  0,  6,  0,  9,  4,  1,  0},
+                                                  { 0,  0,  0,  1,  4,  8,  0,  7,  2},
+                                                  { 1,  4,  0,  8,  0,  0,  7,  0,  0},
+                                                  { 0,  7,  3,  4,  9,  2,  1,  6,  8},
+                                                  { 9,  8,  0,  3,  0,  0,  2,  5,  4},
+                                                  { 4,  0,  1,  9,  3,  6,  5,  8,  7},
+                                                  { 8,  6,  0,  7,  2,  1,  0,  4,  0},
+                                                  { 0,  9,  0,  5,  0,  0,  6,  2,  0}};
+
 
 TEST_F(SolverTest, SolverLeavesNoZeroes) {
-    for (int numberOfZeroes = 0; numberOfZeroes < 81; ++numberOfZeroes) {
+    for (int numberOfNonZeroes = 0; numberOfNonZeroes < 81; ++numberOfNonZeroes) {
         for (int runs = 0; runs < 5; ++runs) {
-            auto gameboard = generator->generate(9, numberOfZeroes);
+            auto gameboard = generator->generate(9, numberOfNonZeroes);
             auto solver = new Solver(gameboard);
             solver->solve();
             EXPECT_TRUE(gameBoardHasNoZeroes(gameboard));
+            delete(gameboard);
+            delete(solver);
         }
     }
+     /*
+    for (int runs = 0; runs < 1000; ++runs) {
+
+        auto localGameboard = new Gameboard(9);
+        for (int row = 0; row < 9; ++row) {
+            for (int col = 0; col < 9; ++col) {
+                localGameboard->applyMove(new Move(col, row, nearlyfullGameboard[row][col]));
+            }
+        }
+        auto solver = new Solver(localGameboard);
+        solver->solve();
+        EXPECT_TRUE(gameBoardHasNoZeroes(localGameboard));
+        delete(localGameboard);
+        delete(solver);
+    }*/
 }
 
 

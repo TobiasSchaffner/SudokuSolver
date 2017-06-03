@@ -15,7 +15,7 @@ protected:
         generator = NULL;
     }
 
-    virtual bool givenNumberOfFielsAreZero(Gameboard *gameboard, int numberOfFieldsToBeZero) {
+    virtual bool givenNumberOfFieldsAreZero(Gameboard *gameboard, int numberOfFieldsToBeZero) {
         int countedZeros = 0;
         int **array = gameboard->get2DArray();
         for (int cols = 0; cols < 9; ++cols) {
@@ -42,7 +42,8 @@ Generator *GeneratorTest::generator = NULL;
 TEST_F(GeneratorTest, GeneratorCreatesFullGameBoardsWhenNoDeletesAreSet) {
     for (int runs = 0; runs < 10; ++runs) {
         auto gameboard = generator->generate(9, 81);
-        EXPECT_TRUE(givenNumberOfFielsAreZero(gameboard, 0));
+        EXPECT_TRUE(givenNumberOfFieldsAreZero(gameboard, 0));
+        delete(gameboard);
     }
 }
 
@@ -50,6 +51,7 @@ TEST_F(GeneratorTest, GeneratorCreatesFullGameBoardsWhenNoDeletesAreSet) {
 TEST_F(GeneratorTest, GeneratorCreatesGameBoardWith20Zeroes) {
     for (int runs = 0; runs < 10; ++runs) {
         auto gameboard = generator->generate(9, 61);
-        EXPECT_TRUE(givenNumberOfFielsAreZero(gameboard, 20));
+        EXPECT_TRUE(givenNumberOfFieldsAreZero(gameboard, 20));
+        delete(gameboard);
     }
 }

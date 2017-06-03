@@ -118,23 +118,21 @@ bool Gameboard::getPromisingMove(Move *move) {
 
     for (int column = 0; column < getSize(); column++) {
         for (int row = 0; row < getSize(); row++) {
-            int possibles = getSetPositions(column, row);
-            if (possibles > max) {
+            int valuesSet = getSetPositions(column, row);
+            column;
+            row;
+            valuesSet;
+            if (valuesSet > max) {
                 move->column = column;
                 move->row = row;
-                max = possibles;
+                max = valuesSet;
             }
         }
     }
     return max > 0;
 }
 
-//Todo richtiger wäre die auskommentierte Variante, braucht aber ewig...
 int Gameboard::getSetPositions(int column, int row) {
     int seg = getSegmentNumber(column, row);
-    int possibles = boardData[column][row] != 0 ? 0 : (rows[row] | columns[column] | segments[seg]);
-    return __builtin_popcount(possibles);
-    //int possibles = boardData[column][row] != 0 ? 0 : ((rows[row]) + columns[column]) + (segments[seg]);
-    //return __builtin_popcount(possibles);
-
+    return boardData[column][row] != 0 ? 0 : __builtin_popcount(rows[row] | columns[column] | segments[seg]);
 }
