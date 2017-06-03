@@ -98,6 +98,7 @@ bool Gameboard::checkField(Move* move) {
     return false;
 }
 
+//Todo hier nicht checken, ob feld schon besetzt? so nicht intuitiv in benutzung.
 bool Gameboard::isPossible(Move* move) {
     return !checkRow(move) &&
            !checkColumn(move) &&
@@ -128,8 +129,12 @@ bool Gameboard::getPromisingMove(Move *move) {
     return max > 0;
 }
 
+//Todo richtiger wäre die auskommentierte Variante, braucht aber ewig...
 int Gameboard::getSetPositions(int column, int row) {
     int seg = getSegmentNumber(column, row);
     int possibles = boardData[column][row] != 0 ? 0 : (rows[row] | columns[column] | segments[seg]);
     return __builtin_popcount(possibles);
+    //int possibles = boardData[column][row] != 0 ? 0 : ((rows[row]) + columns[column]) + (segments[seg]);
+    //return __builtin_popcount(possibles);
+
 }
