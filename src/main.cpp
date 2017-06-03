@@ -9,7 +9,9 @@ int main() {
     //auto binit = new BoardInitializer();
 
     auto generator = new Generator();
-    auto gameboard = generator->generate(9, 81);
+    auto gameboard = generator->generate(9, 50);
+    auto solve = new Solver(gameboard);
+    solve->solve();
     print2DArray(gameboard->get2DArray(), 9);
 /*
     std::map<int, std::string> paths = binit->create();

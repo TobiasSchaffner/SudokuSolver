@@ -10,12 +10,9 @@ Gameboard* Generator::generate(int size, int solved) {
     assert(size * size >= solved);
     Gameboard* gameboard;
 
-    bool solvableGameboardCreated = false;
-    while (!solvableGameboardCreated) {
-        gameboard = getSeededGameboard(size);
-        auto solver = new Solver(gameboard);
-        solvableGameboardCreated = solver->solve();
-    }
+    gameboard = getSeededGameboard(size);
+    auto solver = new Solver(gameboard);
+    solver->solve();
     randomRemove(gameboard, solved);
 
     return gameboard;
@@ -37,7 +34,7 @@ void Generator::randomRemove(Gameboard* gameboard, int solved) {
 int* Generator::randomArray(int size) {
     int* numbers = new int[size];
     for (int i = 0; i < size; i++) numbers[i] = i + 1;
-    std::srand(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+    std::srand((unsigned int) std::chrono::high_resolution_clock::now().time_since_epoch().count());
     std::random_shuffle(&numbers[0], &numbers[size]);
     return numbers;
 }
@@ -55,22 +52,14 @@ Gameboard* Generator::getSeededGameboard(int size) {
         gameboard->applyMove(move);
     }
 
-    int offset = 1;
-    move->column = 0;
-    for (move->row = 1; move->row < size; move->row++) {
-        if (firstColumnValues[move->row -1] == firstRowValues[0]) offset = 0;
-        move->value = firstColumnValues[move->row - offset];
-        gameboard->applyMove(move);
-    }
-
-/*
-    int frontIndex = 0;
+    int frontIndex = 1;
     int backIndex = 3;
     move->column = 0;
     for (int row = 0; row < size; row++) {
         move->value = firstColumnValues[row];
-        if (firstColumnValues[row] == firstRowValues[0] ||
-               firstColumnValues[row] == firstRowValues[1] ||
+        if (firstColumnValues[row] == firstRowValues[0]) {
+            continue;
+        } else if (firstColumnValues[row] == firstRowValues[1] ||
                firstColumnValues[row] == firstRowValues[2]) {
             move->row = backIndex++;
         } else {
@@ -81,7 +70,7 @@ Gameboard* Generator::getSeededGameboard(int size) {
         }
         gameboard->applyMove(move);
     }
-*/
+
     print2DArray(gameboard->get2DArray(), 9);
 
     delete(move);
