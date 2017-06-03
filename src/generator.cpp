@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <ctime>
 #include <chrono>
+#include <util.h>
 #include "../include/gameboard.h"
 #include "../include/generator.h"
 
@@ -61,6 +62,27 @@ Gameboard* Generator::getSeededGameboard(int size) {
         move->value = firstColumnValues[move->row - offset];
         gameboard->applyMove(move);
     }
+
+/*
+    int frontIndex = 0;
+    int backIndex = 3;
+    move->column = 0;
+    for (int row = 0; row < size; row++) {
+        move->value = firstColumnValues[row];
+        if (firstColumnValues[row] == firstRowValues[0] ||
+               firstColumnValues[row] == firstRowValues[1] ||
+               firstColumnValues[row] == firstRowValues[2]) {
+            move->row = backIndex++;
+        } else {
+            if (frontIndex < 3)
+                move->row = frontIndex++;
+            else
+                move->row = backIndex++;
+        }
+        gameboard->applyMove(move);
+    }
+*/
+    print2DArray(gameboard->get2DArray(), 9);
 
     delete(move);
     return gameboard;
