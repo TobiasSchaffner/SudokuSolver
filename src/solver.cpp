@@ -10,7 +10,7 @@ Solver::~Solver() {}
 bool Solver::solve() {
     Move *move = new Move();
 
-    // Wenn kein freies Feld mehr verfügbar ist ist das Board gelöst.
+    // Wenn kein freies Feld mehr verfügbar ist, ist das Board gelöst.
     if (!gameboard->getPromisingMove(move))
         return true;
 

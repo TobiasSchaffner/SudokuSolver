@@ -92,7 +92,6 @@ std::map<int,std::string> BoardInitializer::create() {
         while ((ent = readdir(dir)) != NULL) {
             if (strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0)
                 path.insert(std::make_pair(index++,directory+ent->d_name));
-//                paths.push_back(directory + ent->d_name);
         }
         closedir(dir);
 

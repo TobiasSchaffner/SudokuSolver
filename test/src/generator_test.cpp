@@ -1,6 +1,5 @@
 #include "gtest/gtest.h"
 #include "../../include/gameboard.h"
-#include "../../include/util.h"
 #include "../../include/generator.h"
 
 
@@ -25,12 +24,7 @@ protected:
                 }
             }
         }
-        if(countedZeros == numberOfFieldsToBeZero) {
-            return true;
-        } else {
-            return false;
-        }
-
+        return countedZeros == numberOfFieldsToBeZero;
     }
 
     static Generator *generator;

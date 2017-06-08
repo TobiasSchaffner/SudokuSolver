@@ -1,8 +1,6 @@
-#include <assert.h>
 #include <algorithm>
 #include <ctime>
 #include <chrono>
-#include <util.h>
 #include "../include/gameboard.h"
 #include "../include/generator.h"
 
@@ -71,7 +69,7 @@ Gameboard* Generator::getSeededGameboard(int size) {
         gameboard->applyMove(move);
     }
 
-    print2DArray(gameboard->get2DArray(), 9);
+//    print2DArray(gameboard->get2DArray(), 9);
 
     delete(move);
     return gameboard;

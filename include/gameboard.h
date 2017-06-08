@@ -8,7 +8,7 @@
 class Gameboard {
 
 private:
-    unsigned int size;
+    int size;
     int** boardData;
 
     int *rows;

@@ -1,7 +1,5 @@
 #include "gtest/gtest.h"
 #include "../../include/gameboard.h"
-#include "../../include/util.h"
-#include "../../include/generator.h"
 
 
 class GameBoardTest : public ::testing::Test {
