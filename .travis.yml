@@ -3,17 +3,17 @@
   "os": "linux",
   "compiler": "gcc",
   "addons": {
-    "packages": {
+    "packages": [
       "cmake",
       "cmake-data"
-    }
+    ]
   },
-  "before_script": {
+  "before_script": [
     "mkdir build",
     "cd build",
     "cmake .."
-  },
-  "script": {
+  ],
+  "script": [
     "cmake --build ."
-  }
+  ]
 }
