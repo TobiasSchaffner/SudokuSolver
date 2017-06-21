@@ -28,6 +28,7 @@
   "script": [
     "cmake --build .",
     "cd test",
+    "ls",	
     "sudokuTest"
   ]
 }
