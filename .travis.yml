@@ -1,2 +1,21 @@
+{
+  "language": "c++",
+  "os": "linux"
+  "compiler": "gcc"
+  "addons": {
+    "packages": {
+      "cmake",
+      "cmake-data"
+    }
+  },
+  "before_script": {
+    "mkdir build",
+    "cd build",
+    "cmake .."
+  },
+  "script": {
+    "cmake --build ."
+  }
+}
 language: cpp
 script: mkdir cmake-build && cmake --build cmake-build --target all -- -j 8
