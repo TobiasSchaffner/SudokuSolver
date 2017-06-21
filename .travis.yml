@@ -1,7 +1,7 @@
 {
   "language": "c++",
   "os": "linux",
-  "dist": "precise"
+  "dist": "precise",
   "compiler": "gcc",
   "addons": {
     "sources": [
