@@ -1,7 +1,7 @@
 {
   "language": "c++",
-  "os": "linux"
-  "compiler": "gcc"
+  "os": "linux",
+  "compiler": "gcc",
   "addons": {
     "packages": {
       "cmake",
@@ -17,5 +17,3 @@
     "cmake --build ."
   }
 }
-language: cpp
-script: mkdir cmake-build && cmake --build cmake-build --target all -- -j 8
