@@ -10,10 +10,13 @@
     "packages": [
       "cmake",
       "cmake-data",
-      "g++-5",
-      "gcc-5"
+      "g++-6",
+      "gcc-6"
     ]
   },
+  "before_install": [
+    "export CXX=\"g++-6\" CC=\"gcc-6\""
+  ],
   "before_script": [
     "mkdir build",
     "cd build",
