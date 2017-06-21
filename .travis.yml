@@ -26,6 +26,8 @@
     "cmake .."
   ],
   "script": [
-    "cmake --build ."
+    "cmake --build .",
+    "cd test",
+    "sudokuTest"
   ]
 }
