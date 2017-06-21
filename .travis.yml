@@ -1,10 +1,11 @@
 {
   "language": "c++",
   "os": "linux",
+  "dist": "precise"
   "compiler": "gcc",
   "addons": {
     "sources": [
-      "livm-toolchain-precise",
+      "george-edison55-precise-backports",
       "ubuntu-toolchain-r-test"
     ],
     "packages": [
