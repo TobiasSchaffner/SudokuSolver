@@ -29,6 +29,6 @@
     "cmake --build .",
     "cd test",
     "ls",	
-    "sudokuTest"
+    "./sudokuTest"
   ]
 }
