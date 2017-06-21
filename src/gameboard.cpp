@@ -98,7 +98,6 @@ bool Gameboard::checkField(Move* move) {
     return false;
 }
 
-//Todo hier nicht checken, ob feld schon besetzt? so nicht intuitiv in benutzung.
 bool Gameboard::isPossible(Move* move) {
     return !checkRow(move) &&
            !checkColumn(move) &&

@@ -3,6 +3,7 @@
 #include <chrono>
 #include "../include/gameboard.h"
 #include "../include/generator.h"
+#include "../include/util.h"
 
 Gameboard* Generator::generate(int size, int solved) {
     assert(size * size >= solved);
@@ -69,7 +70,7 @@ Gameboard* Generator::getSeededGameboard(int size) {
         gameboard->applyMove(move);
     }
 
-//    print2DArray(gameboard->get2DArray(), 9);
+    //print2DArray(gameboard->get2DArray(), 9);
 
     delete(move);
     return gameboard;

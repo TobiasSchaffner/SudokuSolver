@@ -3,6 +3,25 @@
 #include <../include/util.h>
 #include <../include/generator.h>
 
+/**
+ * @mainpage Sudoku Solver
+ * This innovative programm solves every solvable sudoku before you blink twice.\n
+ * It also offers you to generate a sudoku with the difficulty you prefer.\n
+ *
+ * <img src="../images/sudoku.jpg" alt="Oldschool sudoku" title="Remember?">
+ *  <center>Remember this? This is how it used to be done before this powerfull tool.\n\n.</center>
+ *
+ * @author Johannes Bruehl , Manuel Lammich, Florian Pirchmoser, Tobias Schaffner
+ */
+
+/**
+ * @file Main.cpp
+ *
+ * @brief Contains the program start, from where the programm gets initialized and the user commandline-interface is started.
+ *
+ **/
+
+
 using namespace std;
 
 int main() {

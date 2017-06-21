@@ -121,10 +121,6 @@ TEST_F(GameBoardTest, IsPossibleReturnsTrueWhenPossible) {
     EXPECT_TRUE(gb->isPossible(new Move(1,0,2)));
 }
 
-TEST_F(GameBoardTest, IsPossibleReturnsFalseWhenAlreadySet) {
-    gb->applyMove(new Move(0,0,1));
-    EXPECT_FALSE(gb->isPossible(new Move(0,0,2)));
-}
 
 TEST_F(GameBoardTest, IsPossibleReturnsFalseWhenRowHasValue) {
     gb->applyMove(new Move(0,0,1));

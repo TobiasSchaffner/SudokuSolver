@@ -10,18 +10,39 @@
     #define PATH_SEPARATOR "/"
 #endif
 
+/**
+ * @class file_not_found_exception
+ *
+ * @brief exception, when a file was not found.
+ *
+ * This Exception is meant to be thrown, when there is no file found to a given path.
+ */
 class file_not_found_exception : public std::exception {
     virtual const char *what() const throw() {
         return "Your requested gamefile was not found";
     }
 };
 
+/**
+ * @class env_not_set_exception
+ *
+ * @brief exception, when a specific environment variable is not set.
+ *
+ * This Exception is meant to be thrown, when a environment variable is not set before accessing it.
+ */
 class env_not_set_exception : public std::exception {
     virtual const char *what() const throw() {
         return "Set ENV \"SUDOKU_CONF\" to the config path";
     }
 };
 
+/**
+ * @class directory_not_found_exception
+ *
+ * @brief exception, when a directory is not found.
+ *
+ * This Exception is meant to be thrown, when there is no directory found to a given path.
+ */
 class directory_not_found_exception : public std::exception {
     virtual const char *what() const throw() {
         return "Your requested directory was not found";
