@@ -3,9 +3,15 @@
   "os": "linux",
   "compiler": "gcc",
   "addons": {
+    "sources": [
+      "livm-toolchain-precise",
+      "ubuntu-toolchain-r-test"
+    ],
     "packages": [
       "cmake",
-      "cmake-data"
+      "cmake-data",
+      "g++-5",
+      "gcc-5"
     ]
   },
   "before_script": [
