@@ -26,26 +26,11 @@ using namespace std;
 
 int main() {
     auto binit = new BoardInitializer();
-    std::map<int, std::string> paths = binit->create();
+    auto paths = binit->create();
     auto gameboard = new Gameboard(9);
-//    auto generator = new Generator();
-//    auto gameboard = generator->generate(9, 50);
-//    cout<< "print_" << endl;
-//    print2DArray(gameboard->get2DArray(),9);
-//    auto solver = new Solver(gameboard);
-//    solver->solve();
-//    print2DArray(gameboard->get2DArray(), 9);
-//    auto solve = new Solver(gameboard);
-//    solve->solve();
-//    print2DArray(gameboard->get2DArray(), 9);
 
-
-    // Build board from chosen file f
-    // Build board with generator g
-    // Solve board s
-    // q = quit
     int choice;
-    char index = ' ';
+    auto index = ' ';
     while (index != 'q') {
         cout << "Choose: \nBuild board from file: f\nBuild board with generator: g\nSolve board: s" << endl;
         cin >> index;
