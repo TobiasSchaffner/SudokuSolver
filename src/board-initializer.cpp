@@ -89,10 +89,6 @@ Gameboard *BoardInitializer::create(std::string gameName) {
     return gb;
 }
 
-char **BoardInitializer::getGamesSelection() {
-    return nullptr;
-}
-
 std::map<int,std::string> BoardInitializer::create() {
     std::map<int,std::string> path;
     std::string directory;
