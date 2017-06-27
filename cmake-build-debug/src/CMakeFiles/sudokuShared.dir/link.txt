@@ -1,0 +1,2 @@
+C:\MinGW\bin\ar.exe qc libsudokuShared.a  CMakeFiles/sudokuShared.dir/move.cpp.obj CMakeFiles/sudokuShared.dir/gameboard.cpp.obj CMakeFiles/sudokuShared.dir/board-initializer.cpp.obj CMakeFiles/sudokuShared.dir/solver.cpp.obj CMakeFiles/sudokuShared.dir/generator.cpp.obj CMakeFiles/sudokuShared.dir/util.cpp.obj
+C:\MinGW\bin\ranlib.exe libsudokuShared.a
