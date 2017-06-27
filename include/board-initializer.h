@@ -33,9 +33,7 @@ public:
     * Creates a new gameboard from the file with the given name.
     */
     Gameboard *create(std::string gameName);
-
-    char **getGamesSelection();
-
+    
     /**
     * @brief returns map with all found game-files.
     *
