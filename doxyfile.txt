@@ -5,10 +5,10 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = SudokuSolver
-PROJECT_NUMBER         = "Version 1.0"
+PROJECT_NUMBER         = 1.0
 PROJECT_BRIEF          = 
 PROJECT_LOGO           = 
-OUTPUT_DIRECTORY       = html
+OUTPUT_DIRECTORY       = 
 CREATE_SUBDIRS         = NO
 ALLOW_UNICODE_NAMES    = NO
 OUTPUT_LANGUAGE        = English
@@ -112,9 +112,9 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # Configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = ../../src \
+INPUT                  =  \
+                         ../../src \
                          ../../include
-                        
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.c \
                          *.cc \
@@ -342,7 +342,7 @@ CLASS_DIAGRAMS         = YES
 MSCGEN_PATH            = 
 DIA_PATH               = 
 HIDE_UNDOC_RELATIONS   = YES
-HAVE_DOT               = YES
+HAVE_DOT               = NO
 DOT_NUM_THREADS        = 0
 DOT_FONTNAME           = Helvetica
 DOT_FONTSIZE           = 10
@@ -350,17 +350,18 @@ DOT_FONTPATH           =
 CLASS_GRAPH            = YES
 COLLABORATION_GRAPH    = YES
 GROUP_GRAPHS           = YES
-UML_LOOK               = YES
+UML_LOOK               = NO
 UML_LIMIT_NUM_FIELDS   = 10
-TEMPLATE_RELATIONS     = YES
+TEMPLATE_RELATIONS     = NO
 INCLUDE_GRAPH          = YES
 INCLUDED_BY_GRAPH      = YES
-CALL_GRAPH             = YES
-CALLER_GRAPH           = YES
+CALL_GRAPH             = NO
+CALLER_GRAPH           = NO
 GRAPHICAL_HIERARCHY    = YES
 DIRECTORY_GRAPH        = YES
 DOT_IMAGE_FORMAT       = png
 INTERACTIVE_SVG        = NO
+DOT_PATH               = 
 DOTFILE_DIRS           = 
 MSCFILE_DIRS           = 
 DIAFILE_DIRS           = 
@@ -369,7 +370,7 @@ PLANTUML_CFG_FILE      =
 PLANTUML_INCLUDE_PATH  = 
 DOT_GRAPH_MAX_NODES    = 50
 MAX_DOT_GRAPH_DEPTH    = 0
-DOT_TRANSPARENT        = YES
-DOT_MULTI_TARGETS      = YES
+DOT_TRANSPARENT        = NO
+DOT_MULTI_TARGETS      = NO
 GENERATE_LEGEND        = YES
 DOT_CLEANUP            = YES
