@@ -8,9 +8,9 @@
   },
   "env": {
     "global": {
-      "GH_REPO_NAME": "blatt-2-sudoku07",
+      "GH_REPO_NAME": "blatt-2-sudoku07-1",
       "DOXYFILE": "doxyfile.txt",
-      "GH_REPO_REF": "github.com/algdat/blatt-2-sudoku07.git"
+      "GH_REPO_REF": "github.com/algdat/blatt-2-sudoku07-1.git"
     }
   },
   "addons": {
