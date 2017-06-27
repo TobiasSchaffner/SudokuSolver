@@ -9,7 +9,7 @@
   "env": {
     "global": {
       "GH_REPO_NAME": "blatt-2-sudoku07",
-      "DOXYFILE": "",
+      "DOXYFILE": "doxyfile.txt",
       "GH_REPO_REF": "github.com/algdat/blatt-2-sudoku07.git"
     }
   },
