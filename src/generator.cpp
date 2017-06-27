@@ -70,8 +70,6 @@ Gameboard* Generator::getSeededGameboard(int size) {
         gameboard->applyMove(move);
     }
 
-    //print2DArray(gameboard->get2DArray(), 9);
-
     delete(move);
     return gameboard;
 }

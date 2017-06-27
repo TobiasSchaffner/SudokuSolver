@@ -18,10 +18,10 @@ Gameboard::Gameboard(int size) {
 Gameboard::~Gameboard() {
     for(int i = 0; i < this->size; ++i)
         delete(boardData[i]);
-    delete(boardData);
-    delete(rows);
-    delete(columns);
-    delete(segments);
+    delete[] boardData;
+    delete[] rows;
+    delete[] columns;
+    delete[] segments;
 }
 
 bool Gameboard::getFirstEmptyMove(Move *move) {
@@ -36,7 +36,7 @@ bool Gameboard::getFirstEmptyMove(Move *move) {
 }
 
 void Gameboard::applyBitMasks(Move* move) {
-    int seg = getSegmentNumber(move->column, move->row);
+    auto seg = getSegmentNumber(move->column, move->row);
     columns[move->column] = columns[move->column] | (1 << (move->value - 1));
     rows[move->row] = rows[move->row] | (1 << (move->value - 1));
     segments[seg] = segments[seg] | (1 << (move->value - 1));
