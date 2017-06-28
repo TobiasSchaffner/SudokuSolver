@@ -9,7 +9,7 @@
  * It also offers you to generate a sudoku with the difficulty you prefer.\n
  *
  * <img src="../images/sudoku.jpg" alt="Oldschool sudoku" title="Remember?">
- *  <center>Remember this? This is how it used to be done before this powerfull tool.\n\n.</center>
+ *  <center>Remember this? This is how it used to be done before this powerful tool.\n\n.</center>
  *
  * @author Johannes Bruehl , Manuel Lammich, Florian Pirchmoser, Tobias Schaffner
  */
