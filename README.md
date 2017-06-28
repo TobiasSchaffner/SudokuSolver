@@ -47,4 +47,4 @@ segment numbers that are not already in the segment will be set at first pointer
 to the right. In all other cases the Number will be set to the second pointer while moving the pointer one to the right.
 
 ### Docs
-[Docs on github pages](http://algda.github.io/blatt2-sudoku07-1)
+[Docs on github pages](algdat.github.io/blatt-2-sudoku07-1/html/index.html)
